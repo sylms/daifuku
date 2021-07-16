@@ -111,9 +111,9 @@ export default {
   methods: {
     // TODO: メソッド分割
     // query: `/example` のようなパス
-    fetchAPI: function(query) {
+    fetchAPI: function (query) {
       // TODO: URL オブジェクトで生成できるのであればそれでやる
-      let url = `https://${this.apiHost}${query}`
+      let url = `https://${this.apiHost}${query}`;
 
       fetch(url, {
         methods: "GET",
@@ -121,12 +121,13 @@ export default {
       .then((res) => {
         res.json().then((json) => {
           if (json != null) {
-            this.rows = json
+              this.rows = json;
           }
+          });
         })
-      }).catch((err) => {
-        console.error(err)
-      })
+        .catch((err) => {
+          console.error(err);
+        });
     },
 
     submitWord: function() {
