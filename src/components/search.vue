@@ -1,4 +1,15 @@
 <template>
+  <h1>daifuku</h1>
+  <div class="serchForm">
+    <div class="freeWordForm">
+      <label for="courseName">科目名</label>
+      <input type="text" id="courseName" v-model="courseName" placeholder="検索したい語句を入力してください。"><br>
+      <label for="courseOverview">科目概要</label>
+      <input type="text" id="courseOverview" v-model="courseOverview" placeholder="検索したい語句を入力してください。"><br>
+
+      <button v-on:click="submitWord"> 検索 </button>
+    </div>
+  </div>
   <div>
     <table-lite
       :has-checkbox="true"
@@ -21,169 +32,105 @@ export default {
     return {
       columns: [
         {
-          label: "id",
-          field: "id",
-          isKey: true,
+          label: "科目番号",
+          field: "course_number",
         },
         {
-          label: "course_name",
+          label: "科目名",
           field: "course_name",
         },
         {
-          label: "course_name",
-          field: "course_name",
-        },
-        {
-          label: "instructional_type",
+          label: "授業方法",
           field: "instructional_type",
         },
         {
-          label: "credits",
+          label: "単位",
           field: "credits",
         },
         {
-          label: "standard_registration_year",
+          label: "年次",
           field: "standard_registration_year",
         },
         {
-          label: "term",
+          label: "学期",
           field: "term",
         },
         {
-          label: "period",
+          label: "曜時限",
           field: "period",
         },
         {
-          label: "classroom",
+          label: "教室",
           field: "classroom",
         },
         {
-          label: "instructor",
+          label: "担当教員",
           field: "instructor",
         },
         {
-          label: "course_overview",
+          label: "授業概要",
           field: "course_overview",
         },
         {
-          label: "remarks",
+          label: "備考",
           field: "remarks",
         },
         {
-          label: "credited_auditors",
+          label: "科目履修生申請可否",
           field: "credited_auditors",
         },
         {
-          label: "application_conditions",
+          label: "申請条件",
           field: "application_conditions",
         },
         {
-          label: "alt_course_name",
+          label: "英語（日本語）科目名",
           field: "alt_course_name",
         },
         {
-          label: "course_code",
+          label: "科目コード",
           field: "course_code",
         },
         {
-          label: "course_code_name",
+          label: "要件科目名",
           field: "course_code_name",
         },
         {
-          label: "csv_updated_at",
+          label: "最終更新日時",
           field: "csv_updated_at",
         },
-        {
-          label: "year",
-          field: "year",
-        },
-        {
-          label: "created_at",
-          field: "created_at",
-        },
-        {
-          label: "updated_at",
-          field: "updated_at",
-        },
       ],
-      rows: [
-        {
-          id: 4715,
-          course_number: "02AR131",
-          course_name: "空間情報科学特別演習I",
-          instructional_type: 2,
-          credits: "3.0",
-          standard_registration_year: null,
-          term: null,
-          period: null,
-          classroom: "2C410 2B412",
-          instructor: null,
-          course_overview:
-            "空間情報科学と関連する地理学研究で得られた新しい分析方法を題材に,その有効性や問題点を検討する.また,各自の研究に関係の深い内外の研究論文の紹介やその論評を行う.",
-          remarks: "01AC291, 02AR132と同時実施。",
-          credited_auditors: 0,
-          application_conditions: "正規生に限る",
-          alt_course_name: "Special Seminar on Spatial Information Science I",
-          course_code: "02AR131",
-          course_code_name: "空間情報科学特別演習I",
-          csv_updated_at: "2016-09-30T00:00:00+09:00",
-          year: 2021,
-          created_at: "2021-07-14T15:49:00.9092+09:00",
-          updated_at: "2021-07-14T15:49:00.9092+09:00",
-        },
-        {
-          id: 4716,
-          course_number: "02AR132",
-          course_name: "空間情報科学特別演習II",
-          instructional_type: 2,
-          credits: "3.0",
-          standard_registration_year: null,
-          term: null,
-          period: null,
-          classroom: "2C410 2B412",
-          instructor: null,
-          course_overview:
-            "空間情報科学と関連する地理学研究で得られた新しい分析方法を題材に,その有効性や問題点を検討する.また,各自の研究に関係の深い内外の研究論文の紹介やその論評を行う.",
-          remarks: "01AC291, 02AR131と同時実施。",
-          credited_auditors: 0,
-          application_conditions: "正規生に限る",
-          alt_course_name: "Special Seminar on Spatial Information Science II",
-          course_code: "02AR132",
-          course_code_name: "空間情報科学特別演習II",
-          csv_updated_at: "2016-09-30T00:00:00+09:00",
-          year: 2021,
-          created_at: "2021-07-14T15:49:00.9092+09:00",
-          updated_at: "2021-07-14T15:49:00.9092+09:00",
-        },
-        {
-          id: 18019,
-          course_number: "GB13332",
-          course_name: "情報科学特別演習",
-          instructional_type: 2,
-          credits: "2.0",
-          standard_registration_year: null,
-          term: null,
-          period: null,
-          classroom: null,
-          instructor: null,
-          course_overview:
-            "受講生は自身が取り組みたいテーマをアドバイザ教員と相談の上で設定し、演習を行う。グループでの履修が可能。発案力、実現力、表現力を養うことを目的とする。",
-          remarks:
-            "情報科学類生に限る。 オンライン(オンデマンド型) オンライン(同時双方向型) 対面",
-          credited_auditors: 0,
-          application_conditions:
-            "施設設備の許容量上の制約と学類生に対する良質の少人数教育を行うため",
-          alt_course_name:
-            "Introductory Special Exercise in Information Science",
-          course_code: "GB13332",
-          course_code_name: "情報科学特別演習",
-          csv_updated_at: "2021-02-19T01:10:10+09:00",
-          year: 2021,
-          created_at: "2021-07-14T15:49:00.9092+09:00",
-          updated_at: "2021-07-14T15:49:00.9092+09:00",
-        },
-      ],
+      rows: [],
+      apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST
     };
+  },
+
+  methods: {
+    // TODO: メソッド分割
+    // query: `/example` のようなパス
+    fetchAPI: function(query) {
+      // TODO: URL オブジェクトで生成できるのであればそれでやる
+      let url = `https://${this.apiHost}${query}`
+
+      fetch(url, {
+        methods: "GET",
+      })
+      .then((res) => {
+        res.json().then((json) => {
+          if (json != null) {
+            this.rows = json
+          }
+        })
+      }).catch((err) => {
+        console.err(err)
+      })
+    },
+
+    submitWord: function() {
+      const limitNum = 100
+      const queryApi = `/course?course_name=${this.courseName}&course_overview=${this.courseOverview}&filter_type=or&limit=${limitNum}`
+      this.fetchAPI(queryApi)
+    },
   },
 };
 </script>
