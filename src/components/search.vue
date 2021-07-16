@@ -3,11 +3,21 @@
   <div class="serchForm">
     <div class="freeWordForm">
       <label for="courseName">科目名</label>
-      <input type="text" id="courseName" v-model="courseName" placeholder="検索したい語句を入力してください。"><br>
+      <input
+        type="text"
+        id="courseName"
+        v-model="courseName"
+        placeholder="検索したい語句を入力してください。"
+      /><br />
       <label for="courseOverview">科目概要</label>
-      <input type="text" id="courseOverview" v-model="courseOverview" placeholder="検索したい語句を入力してください。"><br>
+      <input
+        type="text"
+        id="courseOverview"
+        v-model="courseOverview"
+        placeholder="検索したい語句を入力してください。"
+      /><br />
 
-      <button v-on:click="submitWord"> 検索 </button>
+      <button v-on:click="submitWord">検索</button>
     </div>
   </div>
   <div>
