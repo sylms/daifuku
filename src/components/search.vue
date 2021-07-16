@@ -44,6 +44,10 @@ export default {
         {
           label: "科目番号",
           field: "course_number",
+          display: function (row) {
+            console.log(row);
+            return `<a href="https://kdb.tsukuba.ac.jp/syllabi/${row.year}/${row.course_number}/jpn/" target="_blank">${row.course_number}</a>`;
+          },
         },
         {
           label: "科目名",
