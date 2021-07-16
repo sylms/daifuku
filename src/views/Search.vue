@@ -1,6 +1,6 @@
 <template>
-  <h1>daifuku</h1>
-  <div class="serchForm">
+  <div class="root">
+    <h1>daifuku</h1>
     <div class="freeWordForm">
       <label for="courseName">科目名</label>
       <input
@@ -19,135 +19,144 @@
 
       <button v-on:click="submitWord">検索</button>
     </div>
-  </div>
-  <div>
-    <table-lite
-      :has-checkbox="false"
-      :columns="columns"
-      :rows="rows"
-      :total="rows.length"
-    ></table-lite>
+    <b-table striped :items="rows" :fields="fields">
+      <template #cell(course_number)="data">
+        <a
+          :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.course_number}/jpn/`"
+          target="_blank" rel="noopener"
+          >{{ data.value }}</a
+        >
+      </template>
+
+      <template #cell(course_overview)="data">
+        {{ getShortString(data.value) }}
+      </template>
+
+      <template #cell(remarks)="data">
+        {{ getShortString(data.value) }}
+      </template>
+
+      <template #cell(application_conditions)="data">
+        {{ getShortString(data.value) }}
+      </template>
+    </b-table>
   </div>
 </template>
 
-<script>
-import TableLite from "vue3-table-lite";
+<script lang="ts">
+import Vue from "vue";
 
-export default {
+export default Vue.extend({
   name: "search",
-  components: {
-    TableLite,
-  },
+  components: {},
   data() {
     return {
-      columns: [
+      fields: [
         {
           label: "科目番号",
-          field: "course_number",
-          display: function (row) {
-            console.log(row);
-            return `<a href="https://kdb.tsukuba.ac.jp/syllabi/${row.year}/${row.course_number}/jpn/" target="_blank">${row.course_number}</a>`;
-          },
+          key: "course_number",
         },
         {
           label: "科目名",
-          field: "course_name",
+          key: "course_name",
         },
         {
           label: "授業方法",
-          field: "instructional_type",
+          key: "instructional_type",
         },
         {
           label: "単位",
-          field: "credits",
+          key: "credits",
         },
         // API の実装がまだできていなく表示するものがないので一時的に非表示にする
         /*
         {
           label: "年次",
-          field: "standard_registration_year",
+          key: "standard_registration_year",
         },
         {
           label: "学期",
-          field: "term",
+          key: "term",
         },
         {
           label: "曜時限",
-          field: "period",
+          key: "period",
         },
         */
         {
           label: "教室",
-          field: "classroom",
+          key: "classroom",
         },
         {
           label: "担当教員",
-          field: "instructor",
+          key: "instructor",
         },
         {
           label: "授業概要",
-          field: "course_overview",
-          display: function (row) {
-            console.log(row);
-            return row.course_overview
-              ? row.course_overview.substring(0, this.substringMaxNum)
-              : null;
-          },
+          key: "course_overview",
+          // display: function (row) {
+          //   console.log(row);
+          //   return row.course_overview
+          //     ? row.course_overview.substring(0, this.substringMaxNum)
+          //     : null;
+          // },
         },
         {
           label: "備考",
-          field: "remarks",
-          display: function (row) {
-            return row.remarks
-              ? row.remarks.substring(0, this.substringMaxNum)
-              : null;
-          },
+          key: "remarks",
+          // display: function (row) {
+          //   return row.remarks
+          //     ? row.remarks.substring(0, this.substringMaxNum)
+          //     : null;
+          // },
         },
         {
           label: "科目履修生申請可否",
-          field: "credited_auditors",
+          key: "credited_auditors",
         },
         {
           label: "申請条件",
-          field: "application_conditions",
-          display: function (row) {
-            return row.application_conditions
-              ? row.application_conditions.substring(0, this.substringMaxNum)
-              : null;
-          },
+          key: "application_conditions",
+          // display: function (row) {
+          //   return row.application_conditions
+          //     ? row.application_conditions.substring(0, this.substringMaxNum)
+          //     : null;
+          // },
         },
         {
           label: "英語（日本語）科目名",
-          field: "alt_course_name",
+          key: "alt_course_name",
         },
         {
           label: "科目コード",
-          field: "course_code",
+          key: "course_code",
         },
         {
           label: "要件科目名",
-          field: "course_code_name",
+          key: "course_code_name",
         },
         {
           label: "最終更新日時",
-          field: "csv_updated_at",
+          key: "csv_updated_at",
         },
       ],
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
+      courseName: "",
+      courseOverview: "",
     };
   },
 
   methods: {
     // TODO: メソッド分割
     // query: `/example` のようなパス
-    fetchAPI: function (query) {
+    fetchAPI: function (query: string) {
       // TODO: URL オブジェクトで生成できるのであればそれでやる
       let url = `https://${this.apiHost}${query}`;
 
       fetch(url, {
-        methods: "GET",
+        method: "GET",
       })
         .then((res) => {
           res.json().then((json) => {
@@ -179,6 +188,10 @@ export default {
       const queryApi = `/course?course_name=${courseName}&course_overview=${courseOverview}&filter_type=${filterType}&limit=${limitNum}`;
       this.fetchAPI(queryApi);
     },
+
+    getShortString: function(str: string) {
+      return str ? `${str.substring(0, this.substringMaxNum)} ...` : ""
+    }
   },
-};
+});
 </script>
