@@ -130,10 +130,23 @@ export default {
         });
     },
 
-    submitWord: function() {
-      const limitNum = 100
-      const queryApi = `/course?course_name=${this.courseName}&course_overview=${this.courseOverview}&filter_type=or&limit=${limitNum}`
-      this.fetchAPI(queryApi)
+    submitWord: function () {
+      const courseName = this.courseName ? this.courseName.trim() : "";
+      const courseOverview = this.courseOverview
+        ? this.courseOverview.trim()
+        : "";
+      const filterType = "or";
+      const limitNum = 100;
+
+      if (courseName == "") {
+        console.error("courseName empty");
+      }
+      if (courseOverview == "") {
+        console.error("courseOverview empty");
+      }
+
+      const queryApi = `/course?course_name=${courseName}&course_overview=${courseOverview}&filter_type=${filterType}&limit=${limitNum}`;
+      this.fetchAPI(queryApi);
     },
   },
 };
