@@ -47,6 +47,8 @@ export default {
           label: "単位",
           field: "credits",
         },
+        // API の実装がまだできていなく表示するものがないので一時的に非表示にする
+        /*
         {
           label: "年次",
           field: "standard_registration_year",
@@ -59,6 +61,7 @@ export default {
           label: "曜時限",
           field: "period",
         },
+        */
         {
           label: "教室",
           field: "classroom",
