@@ -149,11 +149,11 @@ export default {
       fetch(url, {
         methods: "GET",
       })
-      .then((res) => {
-        res.json().then((json) => {
-          if (json != null) {
+        .then((res) => {
+          res.json().then((json) => {
+            if (json != null) {
               this.rows = json;
-          }
+            }
           });
         })
         .catch((err) => {
