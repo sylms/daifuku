@@ -12,7 +12,7 @@
   </div>
   <div>
     <table-lite
-      :has-checkbox="true"
+      :has-checkbox="false"
       :columns="columns"
       :rows="rows"
       :total="rows.length"
