@@ -87,10 +87,21 @@ export default {
         {
           label: "授業概要",
           field: "course_overview",
+          display: function (row) {
+            console.log(row);
+            return row.course_overview
+              ? row.course_overview.substring(0, this.substringMaxNum)
+              : null;
+          },
         },
         {
           label: "備考",
           field: "remarks",
+          display: function (row) {
+            return row.remarks
+              ? row.remarks.substring(0, this.substringMaxNum)
+              : null;
+          },
         },
         {
           label: "科目履修生申請可否",
@@ -99,6 +110,11 @@ export default {
         {
           label: "申請条件",
           field: "application_conditions",
+          display: function (row) {
+            return row.application_conditions
+              ? row.application_conditions.substring(0, this.substringMaxNum)
+              : null;
+          },
         },
         {
           label: "英語（日本語）科目名",
@@ -118,7 +134,8 @@ export default {
         },
       ],
       rows: [],
-      apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST
+      apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
+      substringMaxNum: 5,
     };
   },
 
