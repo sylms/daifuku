@@ -195,3 +195,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style>
+.root {
+  padding: 0px 15px;
+}
+</style>
