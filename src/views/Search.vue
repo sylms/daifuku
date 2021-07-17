@@ -14,7 +14,7 @@
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
-              @keydown.enter="submitWord"
+              @keypress.enter="submitWord"
             ></b-form-input>
           </b-col>
         </b-row>
@@ -29,7 +29,7 @@
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
-              @keydown.enter="submitWord"
+              @keypress.enter="submitWord"
             ></b-form-input>
           </b-col>
         </b-row>
@@ -213,6 +213,12 @@ export default Vue.extend({
     getShortString: function (str: string) {
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
     },
+
+    // inputKeydownTrigger: function (e: KeyboardEvent) {
+    //   if (e.code == 13) {
+    //     this.submitWord()
+    //   }
+    // }
   },
 });
 </script>
