@@ -13,6 +13,7 @@
               v-model="courseName"
               :placeholder="searchPlaceholderMessage"
               type="search"
+              trim
             ></b-form-input>
           </b-col>
         </b-row>
@@ -26,6 +27,7 @@
               v-model="courseOverview"
               :placeholder="searchPlaceholderMessage"
               type="search"
+              trim
             ></b-form-input>
           </b-col>
         </b-row>
@@ -190,10 +192,8 @@ export default Vue.extend({
     },
 
     submitWord: function () {
-      const courseName = this.courseName ? this.courseName.trim() : "";
-      const courseOverview = this.courseOverview
-        ? this.courseOverview.trim()
-        : "";
+      const courseName = this.courseName || "";
+      const courseOverview = this.courseOverview || "";
       const filterType = "or";
       const limitNum = 100;
 
