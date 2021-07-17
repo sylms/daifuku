@@ -14,6 +14,7 @@
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
+              @keydown.enter="submitWord"
             ></b-form-input>
           </b-col>
         </b-row>
@@ -28,6 +29,7 @@
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
+              @keydown.enter="submitWord"
             ></b-form-input>
           </b-col>
         </b-row>
