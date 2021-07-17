@@ -2,22 +2,41 @@
   <div class="root">
     <h1>daifuku</h1>
     <div class="freeWordForm">
-      <label for="courseName">科目名</label>
-      <input
-        type="text"
-        id="courseName"
-        v-model="courseName"
-        placeholder="検索したい語句を入力してください。"
-      /><br />
-      <label for="courseOverview">科目概要</label>
-      <input
-        type="text"
-        id="courseOverview"
-        v-model="courseOverview"
-        placeholder="検索したい語句を入力してください。"
-      /><br />
-
-      <button v-on:click="submitWord">検索</button>
+      <b-container fluid>
+        <b-row>
+          <b-col sm="3">
+            <label for="courseName">科目名</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input
+              id="courseName"
+              v-model="courseName"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
+            <label for="courseOverview">科目概要</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input
+              id="courseOverview"
+              v-model="courseOverview"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <button v-on:click="submitWord">検索</button>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
     <b-table striped :items="rows" :fields="fields">
       <template #cell(course_number)="data">
@@ -146,6 +165,7 @@ export default Vue.extend({
       substringMaxNum: 5,
       courseName: "",
       courseOverview: "",
+      searchPlaceholderMessage: "検索したい語句を入力してください。",
     };
   },
 
@@ -172,10 +192,8 @@ export default Vue.extend({
     },
 
     submitWord: function () {
-      const courseName = this.courseName ? this.courseName.trim() : "";
-      const courseOverview = this.courseOverview
-        ? this.courseOverview.trim()
-        : "";
+      const courseName = this.courseName || "";
+      const courseOverview = this.courseOverview || "";
       const filterType = "or";
       const limitNum = 100;
 
