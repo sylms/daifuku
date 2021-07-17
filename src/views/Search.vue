@@ -15,6 +15,7 @@
               type="search"
               trim
               @keypress.enter="submitWord"
+              autofocus
             ></b-form-input>
           </b-col>
         </b-row>
