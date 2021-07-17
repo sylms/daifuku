@@ -23,7 +23,8 @@
       <template #cell(course_number)="data">
         <a
           :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.course_number}/jpn/`"
-          target="_blank" rel="noopener"
+          target="_blank"
+          rel="noopener"
           >{{ data.value }}</a
         >
       </template>
@@ -189,9 +190,9 @@ export default Vue.extend({
       this.fetchAPI(queryApi);
     },
 
-    getShortString: function(str: string) {
-      return str ? `${str.substring(0, this.substringMaxNum)} ...` : ""
-    }
+    getShortString: function (str: string) {
+      return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
+    },
   },
 });
 </script>
