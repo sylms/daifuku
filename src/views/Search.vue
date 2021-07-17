@@ -177,7 +177,7 @@ export default Vue.extend({
       courseName: "",
       courseOverview: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
-      checkUseApi: "anko",
+      checkUseApi: Math.floor(Math.random() * 2) === 0 ? "anko" : "azuki",
     };
   },
 
