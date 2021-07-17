@@ -3,19 +3,11 @@
     <h1>daifuku</h1>
     <div class="freeWordForm">
       <label for="courseName">科目名</label>
-      <input
-        type="text"
-        id="courseName"
-        v-model="courseName"
-        placeholder="検索したい語句を入力してください。"
-      /><br />
+      <b-form-input id="courseName" v-model="courseName" :placeholder="searchPlaceholderMessage" type="search"></b-form-input>
+      <br />
       <label for="courseOverview">科目概要</label>
-      <input
-        type="text"
-        id="courseOverview"
-        v-model="courseOverview"
-        placeholder="検索したい語句を入力してください。"
-      /><br />
+      <b-form-input id="courseOverview" v-model="courseOverview" :placeholder="searchPlaceholderMessage" type="search"></b-form-input>
+      <br />
 
       <button v-on:click="submitWord">検索</button>
     </div>
@@ -146,6 +138,7 @@ export default Vue.extend({
       substringMaxNum: 5,
       courseName: "",
       courseOverview: "",
+      searchPlaceholderMessage: "検索したい語句を入力してください。",
     };
   },
 
