@@ -5,31 +5,17 @@
       <b-container fluid>
         <b-row>
           <b-col sm="3">
-            <label for="courseName">科目名</label>
+            <label for="keyword">キーワード</label>
           </b-col>
           <b-col sm="9">
             <b-form-input
-              id="courseName"
-              v-model="courseName"
+              id="keyword"
+              v-model="keyword"
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
               @keypress.enter="submitWord"
-            ></b-form-input>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col sm="3">
-            <label for="courseOverview">科目概要</label>
-          </b-col>
-          <b-col sm="9">
-            <b-form-input
-              id="courseOverview"
-              v-model="courseOverview"
-              :placeholder="searchPlaceholderMessage"
-              type="search"
-              trim
-              @keypress.enter="submitWord"
+              autofocus
             ></b-form-input>
           </b-col>
         </b-row>
@@ -174,8 +160,7 @@ export default Vue.extend({
       apiHostAzuki: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST_AZUKI,
       apiHostAnko: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST_ANKO,
       substringMaxNum: 5,
-      courseName: "",
-      courseOverview: "",
+      keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
       checkUseApi: Math.floor(Math.random() * 2) === 0 ? "anko" : "azuki",
     };
@@ -209,31 +194,21 @@ export default Vue.extend({
     },
 
     submitWord: function () {
-      const courseName = this.courseName || "";
-      const courseOverview = this.courseOverview || "";
+      const keyword = this.keyword || "";
       const filterType = "or";
       const limitNum = 100;
 
-      if (courseName == "") {
-        console.error("courseName empty");
-      }
-      if (courseOverview == "") {
-        console.error("courseOverview empty");
+      if (keyword == "") {
+        console.error("keyword empty");
       }
 
-      const queryApi = `/course?course_name=${courseName}&course_overview=${courseOverview}&filter_type=${filterType}&limit=${limitNum}`;
+      const queryApi = `/course?course_name=${keyword}&course_overview=${keyword}&filter_type=${filterType}&limit=${limitNum}`;
       this.fetchAPI(queryApi);
     },
 
     getShortString: function (str: string) {
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
     },
-
-    // inputKeydownTrigger: function (e: KeyboardEvent) {
-    //   if (e.code == 13) {
-    //     this.submitWord()
-    //   }
-    // }
   },
 });
 </script>
