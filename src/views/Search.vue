@@ -2,14 +2,39 @@
   <div class="root">
     <h1>daifuku</h1>
     <div class="freeWordForm">
-      <label for="courseName">科目名</label>
-      <b-form-input id="courseName" v-model="courseName" :placeholder="searchPlaceholderMessage" type="search"></b-form-input>
-      <br />
-      <label for="courseOverview">科目概要</label>
-      <b-form-input id="courseOverview" v-model="courseOverview" :placeholder="searchPlaceholderMessage" type="search"></b-form-input>
-      <br />
-
-      <button v-on:click="submitWord">検索</button>
+      <b-container fluid>
+        <b-row>
+          <b-col sm="3">
+            <label for="courseName">科目名</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input
+              id="courseName"
+              v-model="courseName"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
+            <label for="courseOverview">科目概要</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input
+              id="courseOverview"
+              v-model="courseOverview"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <button v-on:click="submitWord">検索</button>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
     <b-table striped :items="rows" :fields="fields">
       <template #cell(course_number)="data">
