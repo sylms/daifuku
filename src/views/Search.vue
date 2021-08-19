@@ -173,9 +173,9 @@ export default Vue.extend({
       // TODO: URL オブジェクトで生成できるのであればそれでやる
       let url: string;
       if (this.checkUseApi == "azuki") {
-        url = `https://${this.apiHostAzuki}${query}`;
+        url = `${this.apiHostAzuki}${query}`;
       } else {
-        url = `https://${this.apiHostAnko}${query}`;
+        url = `${this.apiHostAnko}${query}`;
       }
 
       fetch(url, {
