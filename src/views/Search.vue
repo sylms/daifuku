@@ -24,14 +24,6 @@
             <button v-on:click="search">検索</button>
           </b-col>
         </b-row>
-        <div id="selectUseApi">
-          <input type="radio" v-model="checkUseApi" value="azuki" />
-          <label for="azuki">azuki</label>
-          <br />
-          <input type="radio" v-model="checkUseApi" value="anko" />
-          <label for="anko">anko</label>
-          <br />
-        </div>
       </b-container>
     </div>
     <b-table striped :items="rows" :fields="fields">
@@ -157,12 +149,10 @@ export default Vue.extend({
         },
       ],
       rows: [],
-      apiHostAzuki: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST_AZUKI,
-      apiHostAnko: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST_ANKO,
+      apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
       keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
-      checkUseApi: Math.floor(Math.random() * 2) === 0 ? "anko" : "azuki",
       course_name_filter_type: "and",
       course_overview_filter_type: "and",
       filter_type: "and",
@@ -172,12 +162,7 @@ export default Vue.extend({
   methods: {
     fetchAPI: function (path: string, query: string) {
       // TODO: URL オブジェクトで生成できるのであればそれでやる
-      let url: string;
-      if (this.checkUseApi == "azuki") {
-        url = `${this.apiHostAzuki}${path}?${query}`;
-      } else {
-        url = `${this.apiHostAnko}${path}?${query}`;
-      }
+      const url = `${this.apiHost}${path}?${query}`;
 
       return fetch(url, {
         method: "GET",
