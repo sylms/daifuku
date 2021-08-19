@@ -14,14 +14,14 @@
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
-              @keypress.enter="submitWord"
+              @keypress.enter="search"
               autofocus
             ></b-form-input>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <button v-on:click="submitWord">検索</button>
+            <button v-on:click="search">検索</button>
           </b-col>
         </b-row>
       </b-container>
@@ -153,42 +153,50 @@ export default Vue.extend({
       substringMaxNum: 5,
       keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
+      course_name_filter_type: "and",
+      course_overview_filter_type: "and",
+      filter_type: "and",
     };
   },
 
   methods: {
-    // TODO: メソッド分割
-    // query: `/example` のようなパス
-    fetchAPI: function (query: string) {
+    fetchAPI: function (path: string, query: string) {
       // TODO: URL オブジェクトで生成できるのであればそれでやる
-      const url = `${this.apiHost}${query}`;
+      const url = `${this.apiHost}${path}?${query}`;
 
-      fetch(url, {
+      return fetch(url, {
         method: "GET",
-      })
-        .then((res) => {
-          res.json().then((json) => {
-            if (json != null) {
-              this.rows = json;
-            }
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      }).then((res) => {
+        if (!res.ok) {
+          return Promise.reject(new Error(`${res.statusText}`));
+        }
+        return res.json();
+      });
     },
 
-    submitWord: function () {
+    buildSearchURLParam: function () {
       const keyword = this.keyword || "";
-      const filterType = "or";
       const limitNum = 100;
 
       if (keyword == "") {
         console.error("keyword empty");
       }
 
-      const queryApi = `/course?course_name=${keyword}&course_overview=${keyword}&filter_type=${filterType}&limit=${limitNum}`;
-      this.fetchAPI(queryApi);
+      const sp = new URLSearchParams();
+      sp.set("course_name", keyword);
+      sp.set("course_name_filter_type", this.course_name_filter_type);
+      sp.set("course_overview", keyword);
+      sp.set("course_overview_filter_type", this.course_overview_filter_type);
+      sp.set("limit", limitNum.toString());
+      sp.set("filter_type", this.filter_type);
+      return sp.toString();
+    },
+
+    search: async function () {
+      const param = this.buildSearchURLParam();
+      this.fetchAPI("/course", param)
+        .then((rowsJson) => (this.rows = rowsJson))
+        .catch((err) => console.error(err));
     },
 
     getShortString: function (str: string) {
