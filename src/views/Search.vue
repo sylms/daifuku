@@ -163,19 +163,21 @@ export default Vue.extend({
       keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
       checkUseApi: Math.floor(Math.random() * 2) === 0 ? "anko" : "azuki",
+      course_name_filter_type: "and",
+      course_overview_filter_type: "and",
+      filter_type: "and",
     };
   },
 
   methods: {
     // TODO: メソッド分割
-    // query: `/example` のようなパス
     fetchAPI: function (query: string) {
       // TODO: URL オブジェクトで生成できるのであればそれでやる
       let url: string;
       if (this.checkUseApi == "azuki") {
-        url = `${this.apiHostAzuki}${query}`;
+        url = `${this.apiHostAzuki}/course?${query}`;
       } else {
-        url = `${this.apiHostAnko}${query}`;
+        url = `${this.apiHostAnko}/course?${query}`;
       }
 
       fetch(url, {
@@ -195,15 +197,20 @@ export default Vue.extend({
 
     submitWord: function () {
       const keyword = this.keyword || "";
-      const filterType = "or";
       const limitNum = 100;
 
       if (keyword == "") {
         console.error("keyword empty");
       }
 
-      const queryApi = `/course?course_name=${keyword}&course_overview=${keyword}&filter_type=${filterType}&limit=${limitNum}`;
-      this.fetchAPI(queryApi);
+      const sp = new URLSearchParams();
+      sp.set("course_name", keyword);
+      sp.set("course_name_filter_type", this.course_name_filter_type);
+      sp.set("course_overview", keyword);
+      sp.set("course_overview_filter_type", this.course_overview_filter_type);
+      sp.set("limit", limitNum.toString());
+      sp.set("filter_type", this.filter_type);
+      this.fetchAPI(sp.toString());
     },
 
     getShortString: function (str: string) {
