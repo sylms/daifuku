@@ -14,14 +14,14 @@
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
-              @keypress.enter="submitWord"
+              @keypress.enter="search"
               autofocus
             ></b-form-input>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <button v-on:click="submitWord">検索</button>
+            <button v-on:click="search">検索</button>
           </b-col>
         </b-row>
         <div id="selectUseApi">
@@ -170,32 +170,26 @@ export default Vue.extend({
   },
 
   methods: {
-    // TODO: メソッド分割
-    fetchAPI: function (query: string) {
+    fetchAPI: function (path: string, query: string) {
       // TODO: URL オブジェクトで生成できるのであればそれでやる
       let url: string;
       if (this.checkUseApi == "azuki") {
-        url = `${this.apiHostAzuki}/course?${query}`;
+        url = `${this.apiHostAzuki}${path}?${query}`;
       } else {
-        url = `${this.apiHostAnko}/course?${query}`;
+        url = `${this.apiHostAnko}${path}?${query}`;
       }
 
-      fetch(url, {
+      return fetch(url, {
         method: "GET",
-      })
-        .then((res) => {
-          res.json().then((json) => {
-            if (json != null) {
-              this.rows = json;
-            }
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      }).then((res) => {
+        if (!res.ok) {
+          return Promise.reject(new Error(`${res.statusText}`));
+        }
+        return res.json();
+      });
     },
 
-    submitWord: function () {
+    buildSearchURLParam: function () {
       const keyword = this.keyword || "";
       const limitNum = 100;
 
@@ -210,7 +204,14 @@ export default Vue.extend({
       sp.set("course_overview_filter_type", this.course_overview_filter_type);
       sp.set("limit", limitNum.toString());
       sp.set("filter_type", this.filter_type);
-      this.fetchAPI(sp.toString());
+      return sp.toString();
+    },
+
+    search: async function () {
+      const param = this.buildSearchURLParam();
+      this.fetchAPI("/course", param)
+        .then((rowsJson) => (this.rows = rowsJson))
+        .catch((err) => console.error(err));
     },
 
     getShortString: function (str: string) {
