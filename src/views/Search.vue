@@ -48,15 +48,22 @@
         {{ getShortString(data.value) }}
       </template>
     </b-table>
+    <infinite-loading
+      v-if="rows.length !== 0"
+      @infinite="infiniteHandler"
+    ></infinite-loading>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import InfiniteLoading from "vue-infinite-loading";
 
 export default Vue.extend({
   name: "search",
-  components: {},
+  components: {
+    InfiniteLoading,
+  },
   data() {
     return {
       fields: [
@@ -156,6 +163,8 @@ export default Vue.extend({
       course_name_filter_type: "and",
       course_overview_filter_type: "and",
       filter_type: "and",
+      page: 1,
+      limit: 20,
     };
   },
 
@@ -174,9 +183,8 @@ export default Vue.extend({
       });
     },
 
-    buildSearchURLParam: function () {
+    buildSearchURLParam: function (offset = 0) {
       const keyword = this.keyword || "";
-      const limitNum = 100;
 
       if (keyword == "") {
         console.error("keyword empty");
@@ -187,20 +195,44 @@ export default Vue.extend({
       sp.set("course_name_filter_type", this.course_name_filter_type);
       sp.set("course_overview", keyword);
       sp.set("course_overview_filter_type", this.course_overview_filter_type);
-      sp.set("limit", limitNum.toString());
+      sp.set("limit", this.limit.toString());
       sp.set("filter_type", this.filter_type);
+      sp.set("offset", offset.toString());
       return sp.toString();
     },
 
     search: async function () {
       const param = this.buildSearchURLParam();
       this.fetchAPI("/course", param)
-        .then((rowsJson) => (this.rows = rowsJson))
+        .then((rowsJson) => {
+          this.rows = rowsJson;
+          // 検索実行によって表示された状態は page = 1 とする
+          this.page = 1;
+        })
         .catch((err) => console.error(err));
     },
 
     getShortString: function (str: string) {
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
+    },
+
+    infiniteHandler: function ($state) {
+      const offset = this.limit * this.page;
+      const param = this.buildSearchURLParam(offset);
+      this.fetchAPI("/course", param)
+        .then((rowsJson) => {
+          if (!rowsJson) {
+            $state.complete();
+            return;
+          }
+          // TODO: OpenAPI 整備のタイミングできれいにする
+          rowsJson.map((row) => {
+            return this.rows.push(row);
+          });
+          this.page++;
+          $state.loaded();
+        })
+        .catch((err) => console.error(err));
     },
   },
 });
