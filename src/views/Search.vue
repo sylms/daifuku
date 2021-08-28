@@ -5,12 +5,28 @@
       <b-container fluid>
         <b-row>
           <b-col sm="3">
-            <label for="keyword">キーワード</label>
+            <label for="courseNameKeyword">科目名</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="2">
+            <div id="selectFilterType_CN">
+              <input
+                type="radio"
+                v-model="checkSearchFilter_CN"
+                value="and_CN"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="checkSearchFilter_CN"
+                value="or_CN"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
+          <b-col sm="7">
             <b-form-input
-              id="keyword"
-              v-model="keyword"
+              id="courseNameKeyword"
+              v-model="courseNameKeyword"
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
@@ -20,6 +36,54 @@
           </b-col>
         </b-row>
         <b-row>
+          <b-col sm="3">
+            <label for="courseOverviewKeyword">授業概要</label>
+          </b-col>
+          <b-col sm="2">
+            <div id="selectFilterType_CO">
+              <input
+                type="radio"
+                v-model="checkSearchFilter_CO"
+                value="and_CO"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="checkSearchFilter_CO"
+                value="or_CO"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="courseOverviewKeyword"
+              v-model="courseOverviewKeyword"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+              autofocus
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="2">
+            <div id="selectFilterType_ALL">
+              <input
+                type="radio"
+                v-model="checkSearchFilter_ALL"
+                value="and_ALL"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="checkSearchFilter_ALL"
+                value="or_ALL"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
           <b-col>
             <button v-on:click="search">検索</button>
           </b-col>
@@ -172,11 +236,15 @@ export default Vue.extend({
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
-      keyword: "",
+      courseNameKeyword: "",
+      courseOverviewKeyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
       course_name_filter_type: "and",
       course_overview_filter_type: "and",
       filter_type: "and",
+      checkSearchFilter_CN: "and_CN",
+      checkSearchFilter_CO: "and_CO",
+      checkSearchFilter_ALL: "and_ALL",
     };
   },
 
@@ -196,20 +264,37 @@ export default Vue.extend({
     },
 
     buildSearchURLParam: function () {
-      const keyword = this.keyword || "";
+      const courseNameKeyword = this.courseNameKeyword || "";
+      const courseOverviewKeyword = this.courseOverviewKeyword || "";
       const limitNum = 100;
 
-      if (keyword == "") {
-        console.error("keyword empty");
+      if (courseNameKeyword == "") {
+        console.error("courseNameKeyword empty");
+      }
+
+      if (courseOverviewKeyword == "") {
+        console.error("courseOverviewKeyword empty");
       }
 
       const sp = new URLSearchParams();
-      sp.set("course_name", keyword);
-      sp.set("course_name_filter_type", this.course_name_filter_type);
-      sp.set("course_overview", keyword);
-      sp.set("course_overview_filter_type", this.course_overview_filter_type);
+      sp.set("course_name", courseNameKeyword);
+      if (this.checkSearchFilter_CN == "and_CN") {
+        sp.set("course_name_filter_type", "and");
+      } else {
+        sp.set("course_name_filter_type", "or");
+      }
+      sp.set("course_overview", courseOverviewKeyword);
+      if (this.checkSearchFilter_CO == "and_CO") {
+        sp.set("course_overview_filter_type", "and");
+      } else {
+        sp.set("course_overview_filter_type", "or");
+      }
       sp.set("limit", limitNum.toString());
-      sp.set("filter_type", this.filter_type);
+      if (this.checkSearchFilter_ALL == "and_ALL") {
+        sp.set("filter_type", "and");
+      } else {
+        sp.set("filter_type", "or");
+      }
       return sp.toString();
     },
 
