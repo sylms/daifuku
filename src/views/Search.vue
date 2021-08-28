@@ -104,6 +104,12 @@
         </span>
       </template>
 
+      <template #cell(term)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ decodeTerm(item) }}
+        </span>
+      </template>
+
       <template #cell(instructor)="data">
         <span v-for="(item, index) in data.value" v-bind:key="index">
           {{ index == 0 ? "" : ", " }}
@@ -283,6 +289,23 @@ export default Vue.extend({
 
     getShortString: function (str: string) {
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
+    },
+
+    decodeTerm: function (num: number) {
+      const ls: string[] = [
+        "春A",
+        "春B",
+        "春C",
+        "秋A",
+        "秋B",
+        "秋C",
+        "夏季休業中",
+        "春季休業中",
+        "通年",
+        "春学期",
+        "秋学期",
+      ];
+      return ls[num - 1];
     },
   },
 });
