@@ -5,12 +5,28 @@
       <b-container fluid>
         <b-row>
           <b-col sm="3">
-            <label for="keyword">キーワード</label>
+            <label for="courseNameKeyword">科目名</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="2">
+            <div id="selectFilterType_CN">
+              <input
+                type="radio"
+                v-model="course_name_filter_type"
+                value="and"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="course_name_filter_type"
+                value="or"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
+          <b-col sm="7">
             <b-form-input
-              id="keyword"
-              v-model="keyword"
+              id="course_name_keyword"
+              v-model="course_name_keyword"
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
@@ -20,6 +36,46 @@
           </b-col>
         </b-row>
         <b-row>
+          <b-col sm="3">
+            <label for="courseOverviewKeyword">授業概要</label>
+          </b-col>
+          <b-col sm="2">
+            <div id="selectFilterType_CO">
+              <input
+                type="radio"
+                v-model="course_overview_filter_type"
+                value="and"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="course_overview_filter_type"
+                value="or"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="course_overview_keyword"
+              v-model="course_overview_keyword"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+              autofocus
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="2">
+            <div id="selectFilterType_ALL">
+              <input type="radio" v-model="filter_type" value="and" />
+              <label for="and">AND</label>
+              <input type="radio" v-model="filter_type" value="or" />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
           <b-col>
             <button v-on:click="search">検索</button>
           </b-col>
@@ -29,7 +85,7 @@
     <b-table striped :items="rows" :fields="fields">
       <template #cell(courseNumber)="data">
         <a
-          :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.course_number}/jpn/`"
+          :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
           target="_blank"
           rel="noopener"
           >{{ data.value }}</a
@@ -97,8 +153,9 @@ export default Vue.extend({
     rows: Course[];
     apiHost: string;
     substringMaxNum: number;
-    keyword: string;
     searchPlaceholderMessage: string;
+    course_name_keyword: string;
+    course_overview_keyword: string;
     course_name_filter_type: GetCourseCourseNameFilterTypeEnum;
     course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum;
     filter_type: GetCourseFilterTypeEnum;
@@ -193,7 +250,8 @@ export default Vue.extend({
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
-      keyword: "",
+      course_name_keyword: "",
+      course_overview_keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
       course_name_filter_type: GetCourseCourseNameFilterTypeEnum.And,
       course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum.And,
@@ -209,8 +267,8 @@ export default Vue.extend({
       const courseApi = new CourseApi(conf);
       courseApi
         .getCourse({
-          courseName: this.keyword,
-          courseOverview: this.keyword,
+          courseName: this.course_name_keyword,
+          courseOverview: this.course_overview_keyword,
           courseNameFilterType: this.course_name_filter_type,
           courseOverviewFilterType: this.course_overview_filter_type,
           // とりあえず固定値
