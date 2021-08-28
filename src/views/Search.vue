@@ -27,13 +27,37 @@
       </b-container>
     </div>
     <b-table striped :items="rows" :fields="fields">
-      <template #cell(course_number)="data">
+      <template #cell(courseNumber)="data">
         <a
           :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.course_number}/jpn/`"
           target="_blank"
           rel="noopener"
           >{{ data.value }}</a
         >
+      </template>
+
+      <template #cell(standardRegistrationYear)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ item }}
+        </span>
+      </template>
+
+      <template #cell(period)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ item }}
+        </span>
+      </template>
+
+      <template #cell(instructor)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ index == 0 ? "" : ", " }}
+          <a
+            :href="`https://trios.tsukuba.ac.jp/researcher/search/simple/${item}`"
+            target="_blank"
+            rel="noopener"
+            >{{ item }}</a
+          >
+        </span>
       </template>
 
       <template #cell(courseOverview)="data">
@@ -97,8 +121,6 @@ export default Vue.extend({
           label: "単位",
           key: "credits",
         },
-        // API の実装がまだできていなく表示するものがないので一時的に非表示にする
-        /*
         {
           label: "年次",
           key: "standardRegistrationYear",
@@ -111,7 +133,6 @@ export default Vue.extend({
           label: "曜時限",
           key: "period",
         },
-        */
         {
           label: "教室",
           key: "classroom",
