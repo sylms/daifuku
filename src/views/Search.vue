@@ -233,7 +233,7 @@ export default Vue.extend({
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
     },
 
-    decodeTerm: function (str: number) {
+    decodeTerm: function (num: number) {
       const ls: string[] = [
         "春A",
         "春B",
@@ -247,8 +247,7 @@ export default Vue.extend({
         "春学期",
         "秋学期",
       ];
-      var ind = str - 1;
-      return ls[ind];
+      return ls[num - 1];
     },
   },
 });
