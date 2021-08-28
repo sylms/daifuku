@@ -190,7 +190,7 @@ export default Vue.extend({
           key: "csvUpdatedAt",
         },
       ],
-      rows: [] as Course[],
+      rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
       keyword: "",
