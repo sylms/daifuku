@@ -36,7 +36,7 @@
         >
       </template>
 
-      <template #cell(course_overview)="data">
+      <template #cell(courseOverview)="data">
         {{ getShortString(data.value) }}
       </template>
 
@@ -44,7 +44,7 @@
         {{ getShortString(data.value) }}
       </template>
 
-      <template #cell(application_conditions)="data">
+      <template #cell(applicationConditions)="data">
         {{ getShortString(data.value) }}
       </template>
     </b-table>
@@ -52,25 +52,46 @@
 </template>
 
 <script lang="ts">
+import {
+  Configuration,
+  Course,
+  GetCourseCourseNameFilterTypeEnum,
+  GetCourseCourseOverviewFilterTypeEnum,
+  GetCourseFilterTypeEnum,
+  CourseApi,
+} from "@/openapi";
 import Vue from "vue";
 
 export default Vue.extend({
   name: "search",
   components: {},
-  data() {
+  data(): {
+    fields: {
+      label: string;
+      key: string;
+    }[];
+    rows: Course[];
+    apiHost: string;
+    substringMaxNum: number;
+    keyword: string;
+    searchPlaceholderMessage: string;
+    course_name_filter_type: GetCourseCourseNameFilterTypeEnum;
+    course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum;
+    filter_type: GetCourseFilterTypeEnum;
+  } {
     return {
       fields: [
         {
           label: "科目番号",
-          key: "course_number",
+          key: "courseNumber",
         },
         {
           label: "科目名",
-          key: "course_name",
+          key: "courseName",
         },
         {
           label: "授業方法",
-          key: "instructional_type",
+          key: "instructionalType",
         },
         {
           label: "単位",
@@ -80,7 +101,7 @@ export default Vue.extend({
         /*
         {
           label: "年次",
-          key: "standard_registration_year",
+          key: "standardRegistrationYear",
         },
         {
           label: "学期",
@@ -101,7 +122,7 @@ export default Vue.extend({
         },
         {
           label: "授業概要",
-          key: "course_overview",
+          key: "courseOverview",
           // display: function (row) {
           //   console.log(row);
           //   return row.course_overview
@@ -120,11 +141,11 @@ export default Vue.extend({
         },
         {
           label: "科目履修生申請可否",
-          key: "credited_auditors",
+          key: "creditedAuditors",
         },
         {
           label: "申請条件",
-          key: "application_conditions",
+          key: "applicationConditions",
           // display: function (row) {
           //   return row.application_conditions
           //     ? row.application_conditions.substring(0, this.substringMaxNum)
@@ -133,69 +154,52 @@ export default Vue.extend({
         },
         {
           label: "英語（日本語）科目名",
-          key: "alt_course_name",
+          key: "altCourseName",
         },
         {
           label: "科目コード",
-          key: "course_code",
+          key: "courseCode",
         },
         {
           label: "要件科目名",
-          key: "course_code_name",
+          key: "courseCodeName",
         },
         {
           label: "最終更新日時",
-          key: "csv_updated_at",
+          key: "csvUpdatedAt",
         },
       ],
-      rows: [],
+      rows: [] as Course[],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
       keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
-      course_name_filter_type: "and",
-      course_overview_filter_type: "and",
-      filter_type: "and",
+      course_name_filter_type: GetCourseCourseNameFilterTypeEnum.And,
+      course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum.And,
+      filter_type: GetCourseFilterTypeEnum.And,
     };
   },
 
   methods: {
-    fetchAPI: function (path: string, query: string) {
-      // TODO: URL オブジェクトで生成できるのであればそれでやる
-      const url = `${this.apiHost}${path}?${query}`;
-
-      return fetch(url, {
-        method: "GET",
-      }).then((res) => {
-        if (!res.ok) {
-          return Promise.reject(new Error(`${res.statusText}`));
-        }
-        return res.json();
-      });
-    },
-
-    buildSearchURLParam: function () {
-      const keyword = this.keyword || "";
-      const limitNum = 100;
-
-      if (keyword == "") {
-        console.error("keyword empty");
-      }
-
-      const sp = new URLSearchParams();
-      sp.set("course_name", keyword);
-      sp.set("course_name_filter_type", this.course_name_filter_type);
-      sp.set("course_overview", keyword);
-      sp.set("course_overview_filter_type", this.course_overview_filter_type);
-      sp.set("limit", limitNum.toString());
-      sp.set("filter_type", this.filter_type);
-      return sp.toString();
-    },
-
     search: async function () {
-      const param = this.buildSearchURLParam();
-      this.fetchAPI("/course", param)
-        .then((rowsJson) => (this.rows = rowsJson))
+      const conf = new Configuration({
+        basePath: this.apiHost,
+      });
+      const courseApi = new CourseApi(conf);
+      courseApi
+        .getCourse({
+          courseName: this.keyword,
+          courseOverview: this.keyword,
+          courseNameFilterType: this.course_name_filter_type,
+          courseOverviewFilterType: this.course_overview_filter_type,
+          // とりあえず固定値
+          limit: 100,
+          filterType: this.filter_type,
+        })
+        .then((courses) => {
+          this.rows = courses;
+          console.log(courses);
+        })
         .catch((err) => console.error(err));
     },
 
