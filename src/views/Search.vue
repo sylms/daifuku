@@ -36,6 +36,30 @@
         >
       </template>
 
+      <template #cell(standard_registration_year)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ item }}
+        </span>
+      </template>
+
+      <template #cell(period)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ item }}
+        </span>
+      </template>
+
+      <template #cell(instructor)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ index == 0 ? "" : ", " }}
+          <a
+            :href="`https://trios.tsukuba.ac.jp/researcher/search/${item}`"
+            target="_blank"
+            rel="noopener"
+            >{{ item }}</a
+          >
+        </span>
+      </template>
+
       <template #cell(course_overview)="data">
         {{ getShortString(data.value) }}
       </template>
@@ -76,8 +100,6 @@ export default Vue.extend({
           label: "単位",
           key: "credits",
         },
-        // API の実装がまだできていなく表示するものがないので一時的に非表示にする
-        /*
         {
           label: "年次",
           key: "standard_registration_year",
@@ -90,7 +112,6 @@ export default Vue.extend({
           label: "曜時限",
           key: "period",
         },
-        */
         {
           label: "教室",
           key: "classroom",
