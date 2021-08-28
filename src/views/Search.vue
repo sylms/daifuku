@@ -219,7 +219,6 @@ export default Vue.extend({
         })
         .then((courses) => {
           this.rows = courses;
-          console.log(courses);
         })
         .catch((err) => console.error(err));
     },
