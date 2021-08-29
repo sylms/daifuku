@@ -63,7 +63,6 @@
               type="search"
               trim
               @keypress.enter="search"
-              autofocus
             ></b-form-input>
           </b-col>
         </b-row>
