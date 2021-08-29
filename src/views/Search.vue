@@ -135,8 +135,9 @@
       </template>
     </b-table>
     <infinite-loading
-      v-if="rows.length !== 0"
+      v-if="searched"
       @infinite="infiniteHandler"
+      :identifier="infiniteLoadingIdentifier"
     ></infinite-loading>
   </div>
 </template>
@@ -174,6 +175,8 @@ export default Vue.extend({
     filter_type: GetCourseFilterTypeEnum;
     page: number;
     limit: number;
+    searched: boolean;
+    infiniteLoadingIdentifier: number;
   } {
     return {
       fields: [
@@ -273,29 +276,17 @@ export default Vue.extend({
       filter_type: GetCourseFilterTypeEnum.And,
       page: 1,
       limit: 20,
+      searched: false,
+      infiniteLoadingIdentifier: 0,
     };
   },
   methods: {
     search: async function () {
-      const conf = new Configuration({
-        basePath: this.apiHost,
-      });
-      const courseApi = new CourseApi(conf);
-      courseApi
-        .getCourse({
-          courseName: this.course_name_keyword,
-          courseOverview: this.course_overview_keyword,
-          courseNameFilterType: this.course_name_filter_type,
-          courseOverviewFilterType: this.course_overview_filter_type,
-          // とりあえず固定値
-          limit: this.limit,
-          filterType: this.filter_type,
-        })
-        .then((courses) => {
-          this.rows = courses;
-          this.page = 1;
-        })
-        .catch((err) => console.error(err));
+      this.searched = true;
+      this.page = 1;
+      this.rows = [];
+      // vue-infinite-loading を初期状態に戻すために、この変数に変更を加えている
+      this.infiniteLoadingIdentifier++;
     },
 
     getShortString: function (str: string) {
@@ -304,7 +295,7 @@ export default Vue.extend({
 
     // TODO: any
     infiniteHandler: function ($state: any) {
-      const offset = this.limit * this.page;
+      const offset = this.limit * (this.page - 1);
 
       const conf = new Configuration({
         basePath: this.apiHost,
