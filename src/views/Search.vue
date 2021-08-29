@@ -5,12 +5,28 @@
       <b-container fluid>
         <b-row>
           <b-col sm="3">
-            <label for="keyword">キーワード</label>
+            <label for="courseNameKeyword">科目名</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="2">
+            <div id="selectFilterType_CN">
+              <input
+                type="radio"
+                v-model="course_name_filter_type"
+                value="and"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="course_name_filter_type"
+                value="or"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
+          <b-col sm="7">
             <b-form-input
-              id="keyword"
-              v-model="keyword"
+              id="course_name_keyword"
+              v-model="course_name_keyword"
               :placeholder="searchPlaceholderMessage"
               type="search"
               trim
@@ -20,6 +36,46 @@
           </b-col>
         </b-row>
         <b-row>
+          <b-col sm="3">
+            <label for="courseOverviewKeyword">授業概要</label>
+          </b-col>
+          <b-col sm="2">
+            <div id="selectFilterType_CO">
+              <input
+                type="radio"
+                v-model="course_overview_filter_type"
+                value="and"
+              />
+              <label for="and">AND</label>
+              <input
+                type="radio"
+                v-model="course_overview_filter_type"
+                value="or"
+              />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="course_overview_keyword"
+              v-model="course_overview_keyword"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+              autofocus
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="2">
+            <div id="selectFilterType_ALL">
+              <input type="radio" v-model="filter_type" value="and" />
+              <label for="and">AND</label>
+              <input type="radio" v-model="filter_type" value="or" />
+              <label for="or">OR</label>
+            </div>
+          </b-col>
           <b-col>
             <button v-on:click="search">検索</button>
           </b-col>
@@ -27,16 +83,46 @@
       </b-container>
     </div>
     <b-table striped :items="rows" :fields="fields">
-      <template #cell(course_number)="data">
+      <template #cell(courseNumber)="data">
         <a
-          :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.course_number}/jpn/`"
+          :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
           target="_blank"
           rel="noopener"
           >{{ data.value }}</a
         >
       </template>
 
-      <template #cell(course_overview)="data">
+      <template #cell(standardRegistrationYear)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ item }}
+        </span>
+      </template>
+
+      <template #cell(period)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ item }}
+        </span>
+      </template>
+
+      <template #cell(term)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ decodeTerm(item) }}
+        </span>
+      </template>
+
+      <template #cell(instructor)="data">
+        <span v-for="(item, index) in data.value" v-bind:key="index">
+          {{ index == 0 ? "" : ", " }}
+          <a
+            :href="`https://trios.tsukuba.ac.jp/researcher/search/simple/${item}`"
+            target="_blank"
+            rel="noopener"
+            >{{ item }}</a
+          >
+        </span>
+      </template>
+
+      <template #cell(courseOverview)="data">
         {{ getShortString(data.value) }}
       </template>
 
@@ -44,7 +130,7 @@
         {{ getShortString(data.value) }}
       </template>
 
-      <template #cell(application_conditions)="data">
+      <template #cell(applicationConditions)="data">
         {{ getShortString(data.value) }}
       </template>
     </b-table>
@@ -56,6 +142,14 @@
 </template>
 
 <script lang="ts">
+import {
+  Configuration,
+  Course,
+  GetCourseCourseNameFilterTypeEnum,
+  GetCourseCourseOverviewFilterTypeEnum,
+  GetCourseFilterTypeEnum,
+  CourseApi,
+} from "@/openapi";
 import Vue from "vue";
 import InfiniteLoading from "vue-infinite-loading";
 
@@ -64,30 +158,44 @@ export default Vue.extend({
   components: {
     InfiniteLoading,
   },
-  data() {
+  data(): {
+    fields: {
+      label: string;
+      key: string;
+    }[];
+    rows: Course[];
+    apiHost: string;
+    substringMaxNum: number;
+    searchPlaceholderMessage: string;
+    course_name_keyword: string;
+    course_overview_keyword: string;
+    course_name_filter_type: GetCourseCourseNameFilterTypeEnum;
+    course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum;
+    filter_type: GetCourseFilterTypeEnum;
+    page: number;
+    limit: number;
+  } {
     return {
       fields: [
         {
           label: "科目番号",
-          key: "course_number",
+          key: "courseNumber",
         },
         {
           label: "科目名",
-          key: "course_name",
+          key: "courseName",
         },
         {
           label: "授業方法",
-          key: "instructional_type",
+          key: "instructionalType",
         },
         {
           label: "単位",
           key: "credits",
         },
-        // API の実装がまだできていなく表示するものがないので一時的に非表示にする
-        /*
         {
           label: "年次",
-          key: "standard_registration_year",
+          key: "standardRegistrationYear",
         },
         {
           label: "学期",
@@ -97,7 +205,6 @@ export default Vue.extend({
           label: "曜時限",
           key: "period",
         },
-        */
         {
           label: "教室",
           key: "classroom",
@@ -108,7 +215,7 @@ export default Vue.extend({
         },
         {
           label: "授業概要",
-          key: "course_overview",
+          key: "courseOverview",
           // display: function (row) {
           //   console.log(row);
           //   return row.course_overview
@@ -127,11 +234,11 @@ export default Vue.extend({
         },
         {
           label: "科目履修生申請可否",
-          key: "credited_auditors",
+          key: "creditedAuditors",
         },
         {
           label: "申請条件",
-          key: "application_conditions",
+          key: "applicationConditions",
           // display: function (row) {
           //   return row.application_conditions
           //     ? row.application_conditions.substring(0, this.substringMaxNum)
@@ -140,73 +247,52 @@ export default Vue.extend({
         },
         {
           label: "英語（日本語）科目名",
-          key: "alt_course_name",
+          key: "altCourseName",
         },
         {
           label: "科目コード",
-          key: "course_code",
+          key: "courseCode",
         },
         {
           label: "要件科目名",
-          key: "course_code_name",
+          key: "courseCodeName",
         },
         {
           label: "最終更新日時",
-          key: "csv_updated_at",
+          key: "csvUpdatedAt",
         },
       ],
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
-      keyword: "",
+      course_name_keyword: "",
+      course_overview_keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
-      course_name_filter_type: "and",
-      course_overview_filter_type: "and",
-      filter_type: "and",
+      course_name_filter_type: GetCourseCourseNameFilterTypeEnum.And,
+      course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum.And,
+      filter_type: GetCourseFilterTypeEnum.And,
       page: 1,
       limit: 20,
     };
   },
-
   methods: {
-    fetchAPI: function (path: string, query: string) {
-      // TODO: URL オブジェクトで生成できるのであればそれでやる
-      const url = `${this.apiHost}${path}?${query}`;
-
-      return fetch(url, {
-        method: "GET",
-      }).then((res) => {
-        if (!res.ok) {
-          return Promise.reject(new Error(`${res.statusText}`));
-        }
-        return res.json();
-      });
-    },
-
-    buildSearchURLParam: function (offset = 0) {
-      const keyword = this.keyword || "";
-
-      if (keyword == "") {
-        console.error("keyword empty");
-      }
-
-      const sp = new URLSearchParams();
-      sp.set("course_name", keyword);
-      sp.set("course_name_filter_type", this.course_name_filter_type);
-      sp.set("course_overview", keyword);
-      sp.set("course_overview_filter_type", this.course_overview_filter_type);
-      sp.set("limit", this.limit.toString());
-      sp.set("filter_type", this.filter_type);
-      sp.set("offset", offset.toString());
-      return sp.toString();
-    },
-
     search: async function () {
-      const param = this.buildSearchURLParam();
-      this.fetchAPI("/course", param)
-        .then((rowsJson) => {
-          this.rows = rowsJson;
-          // 検索実行によって表示された状態は page = 1 とする
+      const conf = new Configuration({
+        basePath: this.apiHost,
+      });
+      const courseApi = new CourseApi(conf);
+      courseApi
+        .getCourse({
+          courseName: this.course_name_keyword,
+          courseOverview: this.course_overview_keyword,
+          courseNameFilterType: this.course_name_filter_type,
+          courseOverviewFilterType: this.course_overview_filter_type,
+          // とりあえず固定値
+          limit: this.limit,
+          filterType: this.filter_type,
+        })
+        .then((courses) => {
+          this.rows = courses;
           this.page = 1;
         })
         .catch((err) => console.error(err));
@@ -216,23 +302,51 @@ export default Vue.extend({
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
     },
 
-    infiniteHandler: function ($state) {
+    // TODO: any
+    infiniteHandler: function ($state: any) {
       const offset = this.limit * this.page;
-      const param = this.buildSearchURLParam(offset);
-      this.fetchAPI("/course", param)
-        .then((rowsJson) => {
-          if (!rowsJson) {
+
+      const conf = new Configuration({
+        basePath: this.apiHost,
+      });
+      const courseApi = new CourseApi(conf);
+      courseApi
+        .getCourse({
+          courseName: this.course_name_keyword,
+          courseOverview: this.course_overview_keyword,
+          courseNameFilterType: this.course_name_filter_type,
+          courseOverviewFilterType: this.course_overview_filter_type,
+          limit: this.limit,
+          filterType: this.filter_type,
+          offset: offset,
+        })
+        .then((courses) => {
+          if (courses.length === 0) {
             $state.complete();
             return;
           }
-          // TODO: OpenAPI 整備のタイミングできれいにする
-          rowsJson.map((row) => {
-            return this.rows.push(row);
-          });
+          this.rows.push(...courses);
           this.page++;
           $state.loaded();
         })
         .catch((err) => console.error(err));
+    },
+
+    decodeTerm: function (num: number) {
+      const ls: string[] = [
+        "春A",
+        "春B",
+        "春C",
+        "秋A",
+        "秋B",
+        "秋C",
+        "夏季休業中",
+        "春季休業中",
+        "通年",
+        "春学期",
+        "秋学期",
+      ];
+      return ls[num - 1];
     },
   },
 });
