@@ -138,7 +138,10 @@
       v-if="searched"
       @infinite="infiniteHandler"
       :identifier="infiniteLoadingIdentifier"
-    ></infinite-loading>
+    >
+      <div slot="no-more">検索結果はこれ以上ありません</div>
+      <div slot="no-results">検索条件にヒットする科目はありません</div>
+    </infinite-loading>
   </div>
 </template>
 
