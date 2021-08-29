@@ -133,6 +133,14 @@
         {{ getShortString(data.value) }}
       </template>
     </b-table>
+    <infinite-loading
+      v-if="searched"
+      @infinite="infiniteHandler"
+      :identifier="infiniteLoadingIdentifier"
+    >
+      <div slot="no-more">検索結果はこれ以上ありません</div>
+      <div slot="no-results">検索条件にヒットする科目はありません</div>
+    </infinite-loading>
   </div>
 </template>
 
@@ -146,10 +154,13 @@ import {
   CourseApi,
 } from "@/openapi";
 import Vue from "vue";
+import InfiniteLoading from "vue-infinite-loading";
 
 export default Vue.extend({
   name: "search",
-  components: {},
+  components: {
+    InfiniteLoading,
+  },
   data(): {
     fields: {
       label: string;
@@ -164,6 +175,10 @@ export default Vue.extend({
     course_name_filter_type: GetCourseCourseNameFilterTypeEnum;
     course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum;
     filter_type: GetCourseFilterTypeEnum;
+    page: number;
+    limit: number;
+    searched: boolean;
+    infiniteLoadingIdentifier: number;
   } {
     return {
       fields: [
@@ -261,11 +276,29 @@ export default Vue.extend({
       course_name_filter_type: GetCourseCourseNameFilterTypeEnum.And,
       course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum.And,
       filter_type: GetCourseFilterTypeEnum.And,
+      page: 1,
+      limit: 20,
+      searched: false,
+      infiniteLoadingIdentifier: 0,
     };
   },
-
   methods: {
     search: async function () {
+      this.searched = true;
+      this.page = 1;
+      this.rows = [];
+      // vue-infinite-loading を初期状態に戻すために、この変数に変更を加えている
+      this.infiniteLoadingIdentifier++;
+    },
+
+    getShortString: function (str: string) {
+      return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
+    },
+
+    // TODO: any
+    infiniteHandler: function ($state: any) {
+      const offset = this.limit * (this.page - 1);
+
       const conf = new Configuration({
         basePath: this.apiHost,
       });
@@ -276,18 +309,20 @@ export default Vue.extend({
           courseOverview: this.course_overview_keyword,
           courseNameFilterType: this.course_name_filter_type,
           courseOverviewFilterType: this.course_overview_filter_type,
-          // とりあえず固定値
-          limit: 100,
+          limit: this.limit,
           filterType: this.filter_type,
+          offset: offset,
         })
         .then((courses) => {
-          this.rows = courses;
+          this.rows.push(...courses);
+          if (courses.length < this.limit) {
+            $state.complete();
+            return;
+          }
+          this.page++;
+          $state.loaded();
         })
         .catch((err) => console.error(err));
-    },
-
-    getShortString: function (str: string) {
-      return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
     },
 
     decodeTerm: function (num: number) {
