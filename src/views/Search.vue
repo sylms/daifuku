@@ -315,11 +315,11 @@ export default Vue.extend({
           offset: offset,
         })
         .then((courses) => {
-          if (courses.length === 0) {
+          this.rows.push(...courses);
+          if (courses.length < this.limit) {
             $state.complete();
             return;
           }
-          this.rows.push(...courses);
           this.page++;
           $state.loaded();
         })
