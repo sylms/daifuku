@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <h1>daifuku</h1>
+    <h1>sylms Explorer</h1>
     <div class="freeWordForm">
       <b-container fluid>
         <b-row>

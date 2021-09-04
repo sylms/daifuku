@@ -9,6 +9,7 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Search",
     component: Search,
+    meta: { title: "sylms Explorer" }
   },
 ];
 
