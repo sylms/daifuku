@@ -237,35 +237,6 @@ export default Vue.extend({
           //     : null;
           // },
         },
-        {
-          label: "科目履修生申請可否",
-          key: "creditedAuditors",
-        },
-        {
-          label: "申請条件",
-          key: "applicationConditions",
-          // display: function (row) {
-          //   return row.application_conditions
-          //     ? row.application_conditions.substring(0, this.substringMaxNum)
-          //     : null;
-          // },
-        },
-        {
-          label: "英語（日本語）科目名",
-          key: "altCourseName",
-        },
-        {
-          label: "科目コード",
-          key: "courseCode",
-        },
-        {
-          label: "要件科目名",
-          key: "courseCodeName",
-        },
-        {
-          label: "最終更新日時",
-          key: "csvUpdatedAt",
-        },
       ],
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
