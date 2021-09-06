@@ -13,14 +13,16 @@
                 type="radio"
                 v-model="course_name_filter_type"
                 value="and"
+                id="courseNameFilterTypeAnd"
               />
-              <label for="and">AND</label>
+              <label for="courseNameFilterTypeAnd">AND</label>
               <input
                 type="radio"
                 v-model="course_name_filter_type"
                 value="or"
+                id="courseNameFilterTypeOr"
               />
-              <label for="or">OR</label>
+              <label for="courseNameFilterTypeOr">OR</label>
             </div>
           </b-col>
           <b-col sm="7">
@@ -45,14 +47,16 @@
                 type="radio"
                 v-model="course_overview_filter_type"
                 value="and"
+                id="courseOverviewFilterTypeAnd"
               />
-              <label for="and">AND</label>
+              <label for="courseOverviewFilterTypeAnd">AND</label>
               <input
                 type="radio"
                 v-model="course_overview_filter_type"
                 value="or"
+                id="courseOverviewFilterTypeOr"
               />
-              <label for="or">OR</label>
+              <label for="courseOverviewFilterTypeOr">OR</label>
             </div>
           </b-col>
           <b-col sm="7">
@@ -69,10 +73,20 @@
         <b-row>
           <b-col sm="2">
             <div id="selectFilterType_ALL">
-              <input type="radio" v-model="filter_type" value="and" />
-              <label for="and">AND</label>
-              <input type="radio" v-model="filter_type" value="or" />
-              <label for="or">OR</label>
+              <input
+                type="radio"
+                v-model="filter_type"
+                value="and"
+                id="filterTypeAllAND"
+              />
+              <label for="filterTypeAllAND">AND</label>
+              <input
+                type="radio"
+                v-model="filter_type"
+                value="or"
+                id="filterTypeAllOr"
+              />
+              <label for="filterTypeAllOr">OR</label>
             </div>
           </b-col>
           <b-col>
