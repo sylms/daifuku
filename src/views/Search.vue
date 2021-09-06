@@ -1,6 +1,7 @@
 <template>
   <div class="root">
     <h1>sylms Explorer</h1>
+    <router-link to="/about">sylms Explorer とは</router-link>
     <div class="freeWordForm">
       <b-container fluid>
         <b-row>
