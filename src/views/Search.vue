@@ -285,7 +285,7 @@ export default Vue.extend({
 
     getSearchableErrorMessage: function (): string {
       if (!this.course_name_keyword && !this.course_overview_keyword) {
-        return "科目名と科目概要のどちらかは必須です";
+        return "科目名と授業概要のどちらかは必須です";
       }
       return "";
     },
