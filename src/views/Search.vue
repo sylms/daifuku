@@ -148,6 +148,9 @@
         {{ getShortString(data.value) }}
       </template>
     </b-table>
+    <b-alert v-if="searchQueryErrorMessage" variant="danger" show>{{
+      searchQueryErrorMessage
+    }}</b-alert>
     <infinite-loading
       v-if="searched"
       @infinite="infiniteHandler"
@@ -193,6 +196,7 @@ export default Vue.extend({
     page: number;
     limit: number;
     searched: boolean;
+    searchQueryErrorMessage: string;
     infiniteLoadingIdentifier: number;
   } {
     return {
@@ -265,16 +269,25 @@ export default Vue.extend({
       page: 1,
       limit: 20,
       searched: false,
+      searchQueryErrorMessage: "",
       infiniteLoadingIdentifier: 0,
     };
   },
   methods: {
     search: async function () {
-      this.searched = true;
+      this.searchQueryErrorMessage = this.getSearchableErrorMessage();
+      this.searched = !this.searchQueryErrorMessage;
       this.page = 1;
       this.rows = [];
       // vue-infinite-loading を初期状態に戻すために、この変数に変更を加えている
       this.infiniteLoadingIdentifier++;
+    },
+
+    getSearchableErrorMessage: function (): string {
+      if (!this.course_name_keyword && !this.course_overview_keyword) {
+        return "科目名と科目概要のどちらかは必須です";
+      }
+      return "";
     },
 
     getShortString: function (str: string) {
