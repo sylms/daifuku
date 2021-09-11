@@ -179,6 +179,9 @@ export default Vue.extend({
   components: {
     InfiniteLoading,
   },
+  metaInfo: {
+    title: "sylms Explorer",
+  },
   data(): {
     fields: {
       label: string;

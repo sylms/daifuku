@@ -40,6 +40,9 @@ import Vue from "vue";
 export default Vue.extend({
   name: "about",
   components: {},
+  metaInfo: {
+    title: "sylms Explorer とは",
+  },
   data() {
     return {};
   },
