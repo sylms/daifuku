@@ -10,13 +10,11 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Search",
     component: Search,
-    meta: { title: "sylms Explorer" },
   },
   {
     path: "/about",
     name: "About",
     component: About,
-    meta: { title: "sylms Explorer とは" },
   },
 ];
 
