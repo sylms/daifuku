@@ -365,6 +365,19 @@ export default Vue.extend({
 
   top: 0;
 
-  background-color: lightgray;
+  border-style: hidden;
+
+}
+
+@supports (backdrop-filter: blur(12px)) {
+  .fixed-table-header {
+    backdrop-filter: blur(12px);
+  }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .fixed-table-header {
+    background-color: lightgray;
+  }
 }
 </style>
