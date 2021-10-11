@@ -96,7 +96,12 @@
         </b-row>
       </b-container>
     </div>
-    <b-table striped :items="rows" :fields="fields">
+    <b-table
+      striped
+      :items="rows"
+      :fields="fields"
+      thead-class="fixed-table-header"
+    >
       <template #cell(courseNumber)="data">
         <a
           :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
@@ -350,5 +355,15 @@ export default Vue.extend({
 <style>
 .root {
   padding: 0px 15px;
+}
+
+.fixed-table-header {
+  position: sticky;
+  /* for Safari */
+  position: -webkit-sticky;
+
+  top: 0;
+
+  background-color: lightgray;
 }
 </style>
