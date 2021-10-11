@@ -100,6 +100,7 @@
       striped
       :items="rows"
       :fields="fields"
+      stacked="sm"
       thead-class="fixed-table-header"
     >
       <template #cell(courseNumber)="data">
