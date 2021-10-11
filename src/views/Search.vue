@@ -172,9 +172,9 @@
 import {
   Configuration,
   Course,
-  GetCourseCourseNameFilterTypeEnum,
-  GetCourseCourseOverviewFilterTypeEnum,
-  GetCourseFilterTypeEnum,
+  InlineObjectCourseNameFilterTypeEnum,
+  InlineObjectCourseOverviewFilterTypeEnum,
+  InlineObjectFilterTypeEnum,
   CourseApi,
 } from "@/openapi";
 import Vue from "vue";
@@ -199,9 +199,9 @@ export default Vue.extend({
     searchPlaceholderMessage: string;
     course_name_keyword: string;
     course_overview_keyword: string;
-    course_name_filter_type: GetCourseCourseNameFilterTypeEnum;
-    course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum;
-    filter_type: GetCourseFilterTypeEnum;
+    course_name_filter_type: InlineObjectCourseNameFilterTypeEnum;
+    course_overview_filter_type: InlineObjectCourseOverviewFilterTypeEnum;
+    filter_type: InlineObjectFilterTypeEnum;
     page: number;
     limit: number;
     searched: boolean;
@@ -272,9 +272,9 @@ export default Vue.extend({
       course_name_keyword: "",
       course_overview_keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
-      course_name_filter_type: GetCourseCourseNameFilterTypeEnum.And,
-      course_overview_filter_type: GetCourseCourseOverviewFilterTypeEnum.And,
-      filter_type: GetCourseFilterTypeEnum.And,
+      course_name_filter_type: InlineObjectCourseNameFilterTypeEnum.And,
+      course_overview_filter_type: InlineObjectCourseOverviewFilterTypeEnum.And,
+      filter_type: InlineObjectFilterTypeEnum.And,
       page: 1,
       limit: 20,
       searched: false,
@@ -313,13 +313,15 @@ export default Vue.extend({
       const courseApi = new CourseApi(conf);
       courseApi
         .getCourse({
-          courseName: this.course_name_keyword,
-          courseOverview: this.course_overview_keyword,
-          courseNameFilterType: this.course_name_filter_type,
-          courseOverviewFilterType: this.course_overview_filter_type,
-          limit: this.limit,
-          filterType: this.filter_type,
-          offset: offset,
+          inlineObject: {
+            courseName: this.course_name_keyword,
+            courseOverview: this.course_overview_keyword,
+            courseNameFilterType: this.course_name_filter_type,
+            courseOverviewFilterType: this.course_overview_filter_type,
+            limit: this.limit,
+            filterType: this.filter_type,
+            offset: offset,
+          },
         })
         .then((courses) => {
           this.rows.push(...courses);
@@ -366,7 +368,6 @@ export default Vue.extend({
   top: 0;
 
   border-style: hidden;
-
 }
 
 @supports (backdrop-filter: blur(12px)) {
