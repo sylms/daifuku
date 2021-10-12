@@ -314,12 +314,21 @@ export default Vue.extend({
       courseApi
         .getCourse({
           inlineObject: {
+            // courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
+            // instructionalType:,
+            // credits:,
+            // standardRegistrationYear:,
+            // term:,
+            // period:,
+            // classroom:,
+            // instructor:,
             courseOverview: this.course_overview_keyword,
+            // remarks:,
             courseNameFilterType: this.course_name_filter_type,
             courseOverviewFilterType: this.course_overview_filter_type,
-            limit: this.limit,
             filterType: this.filter_type,
+            limit: this.limit,
             offset: offset,
           },
         })
