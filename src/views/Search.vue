@@ -6,6 +6,23 @@
       <b-container fluid>
         <b-row>
           <b-col sm="3">
+            <label for="courseNameNumber">科目番号</label>
+          </b-col>
+          <b-col sm="2">
+          </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="course_name_number"
+              v-model="course_name_number"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
             <label for="courseNameKeyword">科目名</label>
           </b-col>
           <b-col sm="2">
@@ -197,6 +214,7 @@ export default Vue.extend({
     apiHost: string;
     substringMaxNum: number;
     searchPlaceholderMessage: string;
+    course_name_number: string;
     course_name_keyword: string;
     course_overview_keyword: string;
     course_name_filter_type: InlineObjectCourseNameFilterTypeEnum;
@@ -269,6 +287,7 @@ export default Vue.extend({
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
+      course_name_number: "",
       course_name_keyword: "",
       course_overview_keyword: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
@@ -314,7 +333,7 @@ export default Vue.extend({
       courseApi
         .getCourse({
           inlineObject: {
-            // courseNumber: this.course_name_number,
+            courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
             // instructionalType:,
             // credits:,
