@@ -18,16 +18,13 @@ import {
     Course,
     CourseFromJSON,
     CourseToJSON,
+    InlineObject,
+    InlineObjectFromJSON,
+    InlineObjectToJSON,
 } from '../models';
 
 export interface GetCourseRequest {
-    courseName?: string;
-    courseOverview?: string;
-    courseNameFilterType?: GetCourseCourseNameFilterTypeEnum;
-    courseOverviewFilterType?: GetCourseCourseOverviewFilterTypeEnum;
-    filterType?: GetCourseFilterTypeEnum;
-    limit?: number;
-    offset?: number;
+    inlineObject?: InlineObject;
 }
 
 /**
@@ -42,41 +39,16 @@ export class CourseApi extends runtime.BaseAPI {
     async getCourseRaw(requestParameters: GetCourseRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<Course>>> {
         const queryParameters: any = {};
 
-        if (requestParameters.courseName !== undefined) {
-            queryParameters['course_name'] = requestParameters.courseName;
-        }
-
-        if (requestParameters.courseOverview !== undefined) {
-            queryParameters['course_overview'] = requestParameters.courseOverview;
-        }
-
-        if (requestParameters.courseNameFilterType !== undefined) {
-            queryParameters['course_name_filter_type'] = requestParameters.courseNameFilterType;
-        }
-
-        if (requestParameters.courseOverviewFilterType !== undefined) {
-            queryParameters['course_overview_filter_type'] = requestParameters.courseOverviewFilterType;
-        }
-
-        if (requestParameters.filterType !== undefined) {
-            queryParameters['filter_type'] = requestParameters.filterType;
-        }
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
-
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
             path: `/course`,
-            method: 'GET',
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: InlineObjectToJSON(requestParameters.inlineObject),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CourseFromJSON));
@@ -91,29 +63,4 @@ export class CourseApi extends runtime.BaseAPI {
         return await response.value();
     }
 
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GetCourseCourseNameFilterTypeEnum {
-    And = 'and',
-    Or = 'or'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GetCourseCourseOverviewFilterTypeEnum {
-    And = 'and',
-    Or = 'or'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GetCourseFilterTypeEnum {
-    And = 'and',
-    Or = 'or'
 }
