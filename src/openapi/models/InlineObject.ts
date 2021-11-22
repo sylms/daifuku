@@ -20,17 +20,71 @@ import { exists, mapValues } from '../runtime';
  */
 export interface InlineObject {
     /**
+     * 科目番号
+     * @type {string}
+     * @memberof InlineObject
+     */
+    courseNumber?: string;
+    /**
      * 科目名。半角・全角スペース区切りで単語分割。
      * @type {string}
      * @memberof InlineObject
      */
     courseName?: string;
     /**
+     * 講義形式。複数検索
+     * @type {number}
+     * @memberof InlineObject
+     */
+    instructionalType?: number;
+    /**
+     * 単位数
+     * @type {string}
+     * @memberof InlineObject
+     */
+    credits?: string;
+    /**
+     * 標準履修年次
+     * @type {number}
+     * @memberof InlineObject
+     */
+    standardRegistrationYear?: number;
+    /**
+     * 開講時期。半角・全角スペース区切りで単語分割。
+     * @type {string}
+     * @memberof InlineObject
+     */
+    term?: string;
+    /**
+     * 開講曜日時間。半角・全角スペース区切りで単語分割。
+     * @type {string}
+     * @memberof InlineObject
+     */
+    period?: string;
+    /**
+     * 教室名。半角・全角スペース区切りで単語分割。先頭一致
+     * @type {string}
+     * @memberof InlineObject
+     */
+    classroom?: string;
+    /**
+     * 担当教員名。半角・全角スペース区切りで単語分割。
+     * @type {string}
+     * @memberof InlineObject
+     */
+    instructor?: string;
+    /**
      * 科目概要。半角・全角スペース区切りで単語分割。
      * @type {string}
      * @memberof InlineObject
      */
     courseOverview?: string;
+    /**
+     * 備考。半角・全角スペース区切りで単語分割。
+     * @type {string}
+     * @memberof InlineObject
+     */
+    remarks?: string;
     /**
      * `course_name` の各単語をどのように繋げて検索するか。`course_name` を設定しているときにはこのパラメーターも必須である。
      * @type {string}
@@ -96,8 +150,17 @@ export function InlineObjectFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
+        'courseNumber': !exists(json, 'course_number') ? undefined : json['course_number'],
         'courseName': !exists(json, 'course_name') ? undefined : json['course_name'],
+        'instructionalType': !exists(json, 'instructional_type') ? undefined : json['instructional_type'],
+        'credits': !exists(json, 'credits') ? undefined : json['credits'],
+        'standardRegistrationYear': !exists(json, 'standard_registration_year') ? undefined : json['standard_registration_year'],
+        'term': !exists(json, 'term') ? undefined : json['term'],
+        'period': !exists(json, 'period') ? undefined : json['period'],
+        'classroom': !exists(json, 'classroom') ? undefined : json['classroom'],
+        'instructor': !exists(json, 'instructor') ? undefined : json['instructor'],
         'courseOverview': !exists(json, 'course_overview') ? undefined : json['course_overview'],
+        'remarks': !exists(json, 'remarks') ? undefined : json['remarks'],
         'courseNameFilterType': !exists(json, 'course_name_filter_type') ? undefined : json['course_name_filter_type'],
         'courseOverviewFilterType': !exists(json, 'course_overview_filter_type') ? undefined : json['course_overview_filter_type'],
         'filterType': !exists(json, 'filter_type') ? undefined : json['filter_type'],
@@ -115,8 +178,17 @@ export function InlineObjectToJSON(value?: InlineObject | null): any {
     }
     return {
         
+        'course_number': value.courseNumber,
         'course_name': value.courseName,
+        'instructional_type': value.instructionalType,
+        'credits': value.credits,
+        'standard_registration_year': value.standardRegistrationYear,
+        'term': value.term,
+        'period': value.period,
+        'classroom': value.classroom,
+        'instructor': value.instructor,
         'course_overview': value.courseOverview,
+        'remarks': value.remarks,
         'course_name_filter_type': value.courseNameFilterType,
         'course_overview_filter_type': value.courseOverviewFilterType,
         'filter_type': value.filterType,

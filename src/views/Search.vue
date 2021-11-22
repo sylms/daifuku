@@ -6,6 +6,23 @@
       <b-container fluid>
         <b-row>
           <b-col sm="3">
+            <label for="courseNameNumber">科目番号</label>
+          </b-col>
+          <b-col sm="2">
+          </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="course_name_number"
+              v-model="course_name_number"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
             <label for="courseNameKeyword">科目名</label>
           </b-col>
           <b-col sm="2">
@@ -197,8 +214,17 @@ export default Vue.extend({
     apiHost: string;
     substringMaxNum: number;
     searchPlaceholderMessage: string;
+    course_name_number: string;
     course_name_keyword: string;
+    instructional_type: number;
+    credits: string;
+    standardRegistrationYear: number;
+    term: string;
+    period: string;
+    classroom: string;
+    instructor: string;
     course_overview_keyword: string;
+    remarks: string;
     course_name_filter_type: InlineObjectCourseNameFilterTypeEnum;
     course_overview_filter_type: InlineObjectCourseOverviewFilterTypeEnum;
     filter_type: InlineObjectFilterTypeEnum;
@@ -269,8 +295,17 @@ export default Vue.extend({
       rows: [],
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
+      course_name_number: "",
       course_name_keyword: "",
+      instructional_type: -1,
+      credits: "",
+      standardRegistrationYear: -1,
+      term: "",
+      period: "",
+      classroom: "",
+      instructor: "",
       course_overview_keyword: "",
+      remarks: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
       course_name_filter_type: InlineObjectCourseNameFilterTypeEnum.And,
       course_overview_filter_type: InlineObjectCourseOverviewFilterTypeEnum.And,
@@ -293,8 +328,8 @@ export default Vue.extend({
     },
 
     getSearchableErrorMessage: function (): string {
-      if (!this.course_name_keyword && !this.course_overview_keyword) {
-        return "科目名と授業概要のどちらかは必須です";
+      if (!this.course_name_keyword && !this.course_overview_keyword && !this.course_name_number) {
+        return "空での検索は出来ません。";
       }
       return "";
     },
@@ -314,12 +349,21 @@ export default Vue.extend({
       courseApi
         .getCourse({
           inlineObject: {
+            courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
+            instructionalType: this.instructional_type,
+            credits: this.credits,
+            standardRegistrationYear: this.standardRegistrationYear,
+            term: this.term,
+            period: this.period,
+            classroom: this.classroom,
+            instructor: this.instructor,
             courseOverview: this.course_overview_keyword,
+            remarks: this.remarks,
             courseNameFilterType: this.course_name_filter_type,
             courseOverviewFilterType: this.course_overview_filter_type,
-            limit: this.limit,
             filterType: this.filter_type,
+            limit: this.limit,
             offset: offset,
           },
         })
