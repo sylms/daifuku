@@ -132,7 +132,7 @@
         ><br />
 
         <a
-          :href="`https://twitter.com/intent/tweet?hashtags=${data.item.courseName}%20%23${data.item.courseName}`"
+          :href="`https://twitter.com/intent/tweet?hashtags=${data.item.courseName}%20%23${data.item.courseNumber}`"
           class="twitter-hashtag-button"
           data-show-count="false"
           target="_blank"
