@@ -317,6 +317,13 @@ export default Vue.extend({
       infiniteLoadingIdentifier: 0,
     };
   },
+  mounted() {
+    window.addEventListener("keypress", function(e) {
+      if(e.keyCode === 47) {
+        document.getElementById('course_name_keyword').focus();
+      }
+    });
+  },
   methods: {
     search: async function () {
       this.searchQueryErrorMessage = this.getSearchableErrorMessage();
