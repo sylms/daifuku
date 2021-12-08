@@ -1,29 +1,7 @@
 # daifuku
 
-## Project setup
+## セットアップ
 
-```
-yarn install
-```
+### Web アーカイブ機能をローカルで使う
 
-### Compiles and hot-reloads for development
-
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-
-```
-yarn build
-```
-
-### Lints and fixes files
-
-```
-yarn lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- KdB のシラバスページをクロールしたデータが格納されている WACZ ファイルを `public/wacz/kdb_syllabi.wacz` に配置する。
