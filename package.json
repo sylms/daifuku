@@ -5,7 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint . --ext .ts,.vue",
+    "lint:prettier": "prettier . --check",
+    "fix": "npm run fix:eslint && npm run fix:prettier",
+    "fix:eslint": "eslint . --ext .ts,.vue --fix",
+    "fix:prettier": "prettier . --write"
   },
   "dependencies": {
     "bootstrap": "^5.0.2",
@@ -28,7 +33,7 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-vue": "^7.0.0",
     "prettier": "^2.2.1",
     "typescript": "~4.1.5",

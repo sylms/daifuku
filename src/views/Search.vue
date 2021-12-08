@@ -8,8 +8,7 @@
           <b-col sm="3">
             <label for="courseNameNumber">科目番号</label>
           </b-col>
-          <b-col sm="2">
-          </b-col>
+          <b-col sm="2"> </b-col>
           <b-col sm="7">
             <b-form-input
               id="course_name_number"
@@ -328,7 +327,11 @@ export default Vue.extend({
     },
 
     getSearchableErrorMessage: function (): string {
-      if (!this.course_name_keyword && !this.course_overview_keyword && !this.course_name_number) {
+      if (
+        !this.course_name_keyword &&
+        !this.course_overview_keyword &&
+        !this.course_name_number
+      ) {
         return "空での検索は出来ません。";
       }
       return "";
