@@ -8,8 +8,7 @@
           <b-col sm="3">
             <label for="courseNameNumber">科目番号</label>
           </b-col>
-          <b-col sm="2">
-          </b-col>
+          <b-col sm="2"> </b-col>
           <b-col sm="7">
             <b-form-input
               id="course_name_number"
@@ -120,6 +119,28 @@
       stacked="sm"
       thead-class="fixed-table-header"
     >
+      <template #cell(searchOnTwitter)="data">
+        <a
+          :href="`https://twitter.com/search?q=%22${removeAlphanumeric(
+            data.item.courseName
+          )}%22%20AND%20(%22ITF%22%20OR%20%22筑波%22%20OR%20%22${
+            data.item.courseNumber
+          }%22%20OR%20%22tsukuba%22%20OR%20%22tkb%22%20OR%20%22つくば%22)&src=typed_query&f=live`"
+          target="_blank"
+          rel="noopener"
+          >検索(Twitter)</a
+        ><br />
+
+        <a
+          :href="`https://twitter.com/intent/tweet?hashtags=${data.item.courseName}%20%23${data.item.courseNumber}`"
+          class="twitter-hashtag-button"
+          data-show-count="false"
+          target="_blank"
+          rel="noopener"
+          >Tweet</a
+        >
+      </template>
+
       <template #cell(courseNumber)="data">
         <a
           :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
@@ -253,6 +274,10 @@ export default Vue.extend({
     return {
       fields: [
         {
+          label: "Twitter で検索",
+          key: "searchOnTwitter",
+        },
+        {
           label: "科目番号",
           key: "courseNumber",
         },
@@ -348,7 +373,11 @@ export default Vue.extend({
     },
 
     getSearchableErrorMessage: function (): string {
-      if (!this.course_name_keyword && !this.course_overview_keyword && !this.course_name_number) {
+      if (
+        !this.course_name_keyword &&
+        !this.course_overview_keyword &&
+        !this.course_name_number
+      ) {
         return "空での検索は出来ません。";
       }
       return "";
@@ -356,6 +385,10 @@ export default Vue.extend({
 
     getShortString: function (str: string) {
       return str ? `${str.substring(0, this.substringMaxNum)} ...` : "";
+    },
+
+    removeAlphanumeric: function (str: string) {
+      return str.replace(/^[0-9a-zA-Z-]*/g, "").replace(/[0-9a-zA-Z-]*$/g, "");
     },
 
     // TODO: any
