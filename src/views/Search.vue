@@ -170,6 +170,15 @@
       <template #cell(applicationConditions)="data">
         {{ getShortString(data.value) }}
       </template>
+
+      <template #cell(archiveLink)="data">
+        <a
+          :href="`/archive/#query=https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/&view=resources&urlSearchType=prefix`"
+          target="_blank"
+          rel="noopener"
+          ><font-awesome-icon icon="external-link-alt"
+        /></a>
+      </template>
     </b-table>
     <b-alert v-if="searchQueryErrorMessage" variant="danger" show>{{
       searchQueryErrorMessage
@@ -197,10 +206,17 @@ import {
 import Vue from "vue";
 import InfiniteLoading from "vue-infinite-loading";
 
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faExternalLinkAlt);
+
 export default Vue.extend({
   name: "search",
   components: {
     InfiniteLoading,
+    FontAwesomeIcon,
   },
   metaInfo: {
     title: "sylms Explorer",
@@ -290,6 +306,10 @@ export default Vue.extend({
           //     ? row.remarks.substring(0, this.substringMaxNum)
           //     : null;
           // },
+        },
+        {
+          label: "アーカイブ",
+          key: "archiveLink",
         },
       ],
       rows: [],
