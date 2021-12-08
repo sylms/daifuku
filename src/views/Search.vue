@@ -129,6 +129,15 @@
           target="_blank"
           rel="noopener"
           >検索(Twitter)</a
+        ><br />
+
+        <a
+          :href="`https://twitter.com/intent/tweet?hashtags=${data.item.courseName}%20%23${data.item.courseNumber}`"
+          class="twitter-hashtag-button"
+          data-show-count="false"
+          target="_blank"
+          rel="noopener"
+          >Tweet</a
         >
       </template>
 
