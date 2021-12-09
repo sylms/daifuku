@@ -22,7 +22,7 @@
     "vue": "^2.6.14",
     "vue-infinite-loading": "^2.4.5",
     "vue-meta": "^2.4.0",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.5.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
