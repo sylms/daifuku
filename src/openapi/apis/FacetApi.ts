@@ -15,28 +15,28 @@
 
 import * as runtime from '../runtime';
 import {
-    Course,
-    CourseFromJSON,
-    CourseToJSON,
+    Facet,
+    FacetFromJSON,
+    FacetToJSON,
     Req,
     ReqFromJSON,
     ReqToJSON,
 } from '../models';
 
-export interface GetCourseRequest {
+export interface GetFacetRequest {
     req?: Req;
 }
 
 /**
  * 
  */
-export class CourseApi extends runtime.BaseAPI {
+export class FacetApi extends runtime.BaseAPI {
 
     /**
      * 科目を検索します。  例えば、`course_name` に「情報」と指定した場合、科目名に「情報」を含む科目の情報を返します。 `course_name` と `course_overview` のどちらかはクエリにつける必要があります。 
-     * /course
+     * /facet
      */
-    async getCourseRaw(requestParameters: GetCourseRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<Course>>> {
+    async getFacetRaw(requestParameters: GetFacetRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Facet>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -44,22 +44,22 @@ export class CourseApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/course`,
+            path: `/facet`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ReqToJSON(requestParameters.req),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CourseFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => FacetFromJSON(jsonValue));
     }
 
     /**
      * 科目を検索します。  例えば、`course_name` に「情報」と指定した場合、科目名に「情報」を含む科目の情報を返します。 `course_name` と `course_overview` のどちらかはクエリにつける必要があります。 
-     * /course
+     * /facet
      */
-    async getCourse(requestParameters: GetCourseRequest = {}, initOverrides?: RequestInit): Promise<Array<Course>> {
-        const response = await this.getCourseRaw(requestParameters, initOverrides);
+    async getFacet(requestParameters: GetFacetRequest = {}, initOverrides?: RequestInit): Promise<Facet> {
+        const response = await this.getFacetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
