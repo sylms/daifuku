@@ -251,9 +251,9 @@
 import {
   Configuration,
   Course,
-  InlineObjectCourseNameFilterTypeEnum,
-  InlineObjectCourseOverviewFilterTypeEnum,
-  InlineObjectFilterTypeEnum,
+  ReqCourseNameFilterTypeEnum,
+  ReqCourseOverviewFilterTypeEnum,
+  ReqFilterTypeEnum,
   CourseApi,
 } from "@/openapi";
 import Vue from "vue";
@@ -294,9 +294,9 @@ export default Vue.extend({
     instructor: string;
     course_overview_keyword: string;
     remarks: string;
-    course_name_filter_type: InlineObjectCourseNameFilterTypeEnum;
-    course_overview_filter_type: InlineObjectCourseOverviewFilterTypeEnum;
-    filter_type: InlineObjectFilterTypeEnum;
+    course_name_filter_type: ReqCourseNameFilterTypeEnum;
+    course_overview_filter_type: ReqCourseOverviewFilterTypeEnum;
+    filter_type: ReqFilterTypeEnum;
     page: number;
     limit: number;
     searched: boolean;
@@ -384,9 +384,9 @@ export default Vue.extend({
       course_overview_keyword: "",
       remarks: "",
       searchPlaceholderMessage: "検索したい語句を入力してください。",
-      course_name_filter_type: InlineObjectCourseNameFilterTypeEnum.And,
-      course_overview_filter_type: InlineObjectCourseOverviewFilterTypeEnum.And,
-      filter_type: InlineObjectFilterTypeEnum.And,
+      course_name_filter_type: ReqCourseNameFilterTypeEnum.And,
+      course_overview_filter_type: ReqCourseOverviewFilterTypeEnum.And,
+      filter_type: ReqFilterTypeEnum.And,
       page: 1,
       limit: 20,
       searched: false,
@@ -435,7 +435,7 @@ export default Vue.extend({
       const courseApi = new CourseApi(conf);
       courseApi
         .getCourse({
-          inlineObject: {
+          req: {
             courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
             instructionalType: this.instructional_type,
