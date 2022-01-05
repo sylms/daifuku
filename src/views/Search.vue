@@ -144,106 +144,129 @@
         </b-row>
       </b-container>
     </div>
-    <b-table
-      striped
-      :items="rows"
-      :fields="fields"
-      stacked="sm"
-      thead-class="fixed-table-header"
-    >
-      <template #cell(searchOnTwitter)="data">
-        <a
-          :href="`https://twitter.com/search?q=%22${removeAlphanumeric(
-            data.item.courseName
-          )}%22%20AND%20(%22ITF%22%20OR%20%22筑波%22%20OR%20%22${
-            data.item.courseNumber
-          }%22%20OR%20%22tsukuba%22%20OR%20%22tkb%22%20OR%20%22つくば%22)&src=typed_query&f=live`"
-          target="_blank"
-          rel="noopener"
-          >検索(Twitter)</a
-        ><br />
+    <div class="facetAndList">
+      <b-container fluid>
+        <b-row>
+          <b-col sm="2">
+            <label>開講時期</label>
+            <template v-for="(val, key) in this.facet['termFacet']">
+              <b-button
+                class="btn-block"
+                variant="outline-primary"
+                v-if="val"
+                :key="key"
+                v-on:click="facetSearch(key.replace('_', ''))"
+                >{{
+                  decodeTerm(key.replace("_", "")) + "(" + val + ")"
+                }}</b-button
+              >
+            </template>
+          </b-col>
+          <b-col sm="10">
+            <b-table
+              striped
+              :items="rows"
+              :fields="fields"
+              stacked="sm"
+              thead-class="fixed-table-header"
+            >
+              <template #cell(searchOnTwitter)="data">
+                <a
+                  :href="`https://twitter.com/search?q=%22${removeAlphanumeric(
+                    data.item.courseName
+                  )}%22%20AND%20(%22ITF%22%20OR%20%22筑波%22%20OR%20%22${
+                    data.item.courseNumber
+                  }%22%20OR%20%22tsukuba%22%20OR%20%22tkb%22%20OR%20%22つくば%22)&src=typed_query&f=live`"
+                  target="_blank"
+                  rel="noopener"
+                  >検索(Twitter)</a
+                ><br />
 
-        <a
-          :href="`https://twitter.com/intent/tweet?hashtags=${data.item.courseName}%20%23${data.item.courseNumber}`"
-          class="twitter-hashtag-button"
-          data-show-count="false"
-          target="_blank"
-          rel="noopener"
-          >Tweet</a
-        >
-      </template>
+                <a
+                  :href="`https://twitter.com/intent/tweet?hashtags=${data.item.courseName}%20%23${data.item.courseNumber}`"
+                  class="twitter-hashtag-button"
+                  data-show-count="false"
+                  target="_blank"
+                  rel="noopener"
+                  >Tweet</a
+                >
+              </template>
 
-      <template #cell(courseNumber)="data">
-        <a
-          :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
-          target="_blank"
-          rel="noopener"
-          >{{ data.value }}</a
-        >
-      </template>
+              <template #cell(courseNumber)="data">
+                <a
+                  :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
+                  target="_blank"
+                  rel="noopener"
+                  >{{ data.value }}</a
+                >
+              </template>
 
-      <template #cell(standardRegistrationYear)="data">
-        <span v-for="(item, index) in data.value" v-bind:key="index">
-          {{ item }}
-        </span>
-      </template>
+              <template #cell(standardRegistrationYear)="data">
+                <span v-for="(item, index) in data.value" v-bind:key="index">
+                  {{ item }}
+                </span>
+              </template>
 
-      <template #cell(period)="data">
-        <span v-for="(item, index) in data.value" v-bind:key="index">
-          {{ item }}
-        </span>
-      </template>
+              <template #cell(period)="data">
+                <span v-for="(item, index) in data.value" v-bind:key="index">
+                  {{ item }}
+                </span>
+              </template>
 
-      <template #cell(term)="data">
-        <span v-for="(item, index) in data.value" v-bind:key="index">
-          {{ decodeTerm(item) }}
-        </span>
-      </template>
+              <template #cell(term)="data">
+                <span v-for="(item, index) in data.value" v-bind:key="index">
+                  {{ decodeTerm(item) }}
+                </span>
+              </template>
 
-      <template #cell(instructor)="data">
-        <span v-for="(item, index) in data.value" v-bind:key="index">
-          {{ index == 0 ? "" : ", " }}
-          <a
-            :href="`https://trios.tsukuba.ac.jp/researcher/search/simple/${item}`"
-            target="_blank"
-            rel="noopener"
-            >{{ item }}</a
-          >
-        </span>
-      </template>
+              <template #cell(instructor)="data">
+                <span v-for="(item, index) in data.value" v-bind:key="index">
+                  {{ index == 0 ? "" : ", " }}
+                  <a
+                    :href="`https://trios.tsukuba.ac.jp/researcher/search/simple/${item}`"
+                    target="_blank"
+                    rel="noopener"
+                    >{{ item }}</a
+                  >
+                </span>
+              </template>
 
-      <template #cell(courseOverview)="data">
-        {{ getShortString(data.value) }}
-      </template>
+              <template #cell(courseOverview)="data">
+                {{ getShortString(data.value) }}
+              </template>
 
-      <template #cell(remarks)="data">
-        {{ getShortString(data.value) }}
-      </template>
+              <template #cell(remarks)="data">
+                {{ getShortString(data.value) }}
+              </template>
 
-      <template #cell(applicationConditions)="data">
-        {{ getShortString(data.value) }}
-      </template>
+              <template #cell(applicationConditions)="data">
+                {{ getShortString(data.value) }}
+              </template>
 
-      <template #cell(archiveLink)="data">
-        <a
-          :href="`/archive/#query=https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/&view=resources&urlSearchType=prefix`"
-          target="_blank"
-          rel="noopener"
-          ><font-awesome-icon icon="external-link-alt"
-        /></a>
-      </template>
-    </b-table>
-    <b-alert v-if="searchQueryErrorMessage" variant="danger" show>{{
-      searchQueryErrorMessage
-    }}</b-alert>
-    <infinite-loading
-      v-if="searched"
-      @infinite="infiniteHandler"
-      :identifier="infiniteLoadingIdentifier"
-    >
-      <div slot="no-more">検索結果はこれ以上ありません</div>
-      <div slot="no-results">検索条件にヒットする科目はありません</div>
-    </infinite-loading>
+              <template #cell(archiveLink)="data">
+                <a
+                  :href="`/archive/#query=https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/&view=resources&urlSearchType=prefix`"
+                  target="_blank"
+                  rel="noopener"
+                  ><font-awesome-icon icon="external-link-alt"
+                /></a>
+              </template>
+            </b-table>
+            <b-alert v-if="searchQueryErrorMessage" variant="danger" show>{{
+              searchQueryErrorMessage
+            }}</b-alert>
+            <infinite-loading
+              v-if="searched"
+              @infinite="infiniteHandler"
+              :identifier="infiniteLoadingIdentifier"
+            >
+              <div slot="no-more">検索結果はこれ以上ありません</div>
+              <div slot="no-results">検索条件にヒットする科目はありません</div>
+            </infinite-loading>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
   </div>
 </template>
 
@@ -251,10 +274,12 @@
 import {
   Configuration,
   Course,
+  Facet,
   ReqCourseNameFilterTypeEnum,
   ReqCourseOverviewFilterTypeEnum,
   ReqFilterTypeEnum,
   CourseApi,
+  FacetApi,
 } from "@/openapi";
 import Vue from "vue";
 import InfiniteLoading from "vue-infinite-loading";
@@ -280,6 +305,8 @@ export default Vue.extend({
       key: string;
     }[];
     rows: Course[];
+    facet: Facet;
+    periodTable: { [key: string]: boolean };
     apiHost: string;
     substringMaxNum: number;
     searchPlaceholderMessage: string;
@@ -370,6 +397,8 @@ export default Vue.extend({
         },
       ],
       rows: [],
+      facet: {},
+      periodTable: {},
       apiHost: process.env.VUE_APP_SYLMS_DAIFUKU_API_HOST,
       substringMaxNum: 5,
       course_name_number: "",
@@ -400,8 +429,50 @@ export default Vue.extend({
       this.searched = !this.searchQueryErrorMessage;
       this.page = 1;
       this.rows = [];
+      this.facet = {};
+      this.periodTable = {};
       // vue-infinite-loading を初期状態に戻すために、この変数に変更を加えている
       this.infiniteLoadingIdentifier++;
+
+      const conf = new Configuration({
+        basePath: this.apiHost,
+      });
+      const facetApi = new FacetApi(conf);
+      facetApi
+        .getFacet({
+          req: {
+            courseNumber: this.course_name_number,
+            courseName: this.course_name_keyword,
+            instructionalType: this.instructional_type,
+            credits: this.credits,
+            standardRegistrationYear: this.standardRegistrationYear,
+            term: this.term,
+            period: this.period,
+            classroom: this.classroom,
+            instructor: this.instructor,
+            courseOverview: this.course_overview_keyword,
+            remarks: this.remarks,
+            courseNameFilterType: this.course_name_filter_type,
+            courseOverviewFilterType: this.course_overview_filter_type,
+            filterType: this.filter_type,
+            limit: 0,
+            offset: 0,
+          },
+        })
+        .then((res) => {
+          this.facet = res;
+          // console.log((Object.keys(res)));
+          // console.log(res['termFacet']);
+          // console.log('aaaa');
+        })
+        .catch((err) => console.error(err));
+    },
+
+    facetSearch: function (message: number) {
+      const term = this.decodeTerm(message);
+      // console.log(term);
+      this.term += term;
+      this.search();
     },
 
     getSearchableErrorMessage: function (): string {
