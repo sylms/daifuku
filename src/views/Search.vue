@@ -390,8 +390,7 @@ export default Vue.extend({
         !this.course_overview_keyword &&
         !this.course_name_number &&
         !this.period &&
-        !this.term &&
-        true
+        !this.term
       ) {
         return "空での検索は出来ません。";
       }
