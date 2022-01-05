@@ -88,6 +88,38 @@
           </b-col>
         </b-row>
         <b-row>
+          <b-col sm="3">
+            <label for="coursePeriodKeyword">曜/時限</label>
+          </b-col>
+          <b-col sm="2"> </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="period"
+              v-model="period"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
+            <label for="courseTermKeyword">開講時期</label>
+          </b-col>
+          <b-col sm="2"> </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="term"
+              v-model="term"
+              :placeholder="searchPlaceholderMessage"
+              type="search"
+              trim
+              @keypress.enter="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
           <b-col sm="2">
             <div id="selectFilterType_ALL">
               <input
@@ -376,7 +408,9 @@ export default Vue.extend({
       if (
         !this.course_name_keyword &&
         !this.course_overview_keyword &&
-        !this.course_name_number
+        !this.course_name_number &&
+        !this.period &&
+        !this.term
       ) {
         return "空での検索は出来ません。";
       }
