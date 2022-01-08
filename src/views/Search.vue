@@ -163,6 +163,16 @@
                   decodeTerm(key.replace("_", "")) + "(" + val + ")"
                 }}</b-button
               >
+              <b-button
+                class="btn-block"
+                variant="outline-primary"
+                v-if="!val"
+                :key="key"
+                v-on:click="facetSearch(key.replace('_', ''))"
+                >{{
+                  decodeTerm(key.replace("_", "")) + "(" + 0 + ")"
+                }}</b-button
+              >
             </template>
           </b-col>
           <b-col sm="10">
