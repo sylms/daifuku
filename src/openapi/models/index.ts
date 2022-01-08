@@ -1,4 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './Course';
-export * from './InlineObject';
+export * from './Facet';
+export * from './FacetTermFacet';
+export * from './Req';
