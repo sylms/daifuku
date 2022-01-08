@@ -222,6 +222,12 @@
                 </span>
               </template>
 
+              <template #cell(instructionalType)="data">
+                <span>
+                  {{ decodeInstructionalType(data.value) }}
+                </span>
+              </template>
+
               <template #cell(instructor)="data">
                 <span v-for="(item, index) in data.value" v-bind:key="index">
                   {{ index == 0 ? "" : ", " }}
@@ -381,21 +387,10 @@ export default Vue.extend({
         {
           label: "授業概要",
           key: "courseOverview",
-          // display: function (row) {
-          //   console.log(row);
-          //   return row.course_overview
-          //     ? row.course_overview.substring(0, this.substringMaxNum)
-          //     : null;
-          // },
         },
         {
           label: "備考",
           key: "remarks",
-          // display: function (row) {
-          //   return row.remarks
-          //     ? row.remarks.substring(0, this.substringMaxNum)
-          //     : null;
-          // },
         },
         {
           label: "アーカイブ",
@@ -467,9 +462,6 @@ export default Vue.extend({
         })
         .then((res) => {
           this.facet = res;
-          // console.log((Object.keys(res)));
-          // console.log(res['termFacet']);
-          // console.log('aaaa');
         })
         .catch((err) => console.error(err));
     },
@@ -510,12 +502,7 @@ export default Vue.extend({
         })
         .then((res) => {
           //   this.facet = res;
-          // console.log((Object.keys(res)));
-          // console.log(res['termFacet']);
-          // console.log('aaaa');
           const fileName = "sample.csv";
-          console.log("aaaaa");
-          console.log(res);
           let blob = new Blob([res], {
             type: "text/csv",
           });
@@ -526,7 +513,6 @@ export default Vue.extend({
 
     facetSearch: function (message: number) {
       const term = this.decodeTerm(message);
-      // console.log(term);
       this.term += term;
       this.search();
     },
@@ -606,6 +592,21 @@ export default Vue.extend({
         "通年",
         "春学期",
         "秋学期",
+      ];
+      return ls[num - 1];
+    },
+
+    decodeInstructionalType: function (num: number) {
+      const ls: string[] = [
+        "講義",
+        "演習",
+        "実習/実験/実技",
+        "講義/演習",
+        "講義/実習/実験/実技",
+        "演習/実習/実験/実技",
+        "講義/演習/実習/実験/実技",
+        "卒業論文/卒業研究",
+        "その他",
       ];
       return ls[num - 1];
     },
