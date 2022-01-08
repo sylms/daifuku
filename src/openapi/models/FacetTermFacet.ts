@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 開講時期ごとの件数
+ * 開講時期ごとの検索結果に含まれる件数
  * @export
  * @interface FacetTermFacet
  */

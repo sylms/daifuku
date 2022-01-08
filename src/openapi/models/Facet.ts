@@ -21,7 +21,7 @@ import {
 } from './FacetTermFacet';
 
 /**
- * 
+ * ファセット検索のレスポンス
  * @export
  * @interface Facet
  */
