@@ -424,6 +424,9 @@ export default Vue.extend({
       infiniteLoadingIdentifier: 0,
     };
   },
+  mounted: function () {
+    this.search();
+  },
   methods: {
     search: async function () {
       this.searchQueryErrorMessage = this.getSearchableErrorMessage();
@@ -518,15 +521,6 @@ export default Vue.extend({
     },
 
     getSearchableErrorMessage: function (): string {
-      if (
-        !this.course_name_keyword &&
-        !this.course_overview_keyword &&
-        !this.course_name_number &&
-        !this.period &&
-        !this.term
-      ) {
-        return "空での検索は出来ません。";
-      }
       return "";
     },
 
