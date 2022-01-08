@@ -324,7 +324,6 @@ export default Vue.extend({
     searchPlaceholderMessage: string;
     course_name_number: string;
     course_name_keyword: string;
-    instructional_type: number;
     credits: string;
     standardRegistrationYear: number;
     term: string;
@@ -404,7 +403,6 @@ export default Vue.extend({
       substringMaxNum: 5,
       course_name_number: "",
       course_name_keyword: "",
-      instructional_type: -1,
       credits: "",
       standardRegistrationYear: -1,
       term: "",
@@ -444,15 +442,9 @@ export default Vue.extend({
           req: {
             courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
-            instructionalType: this.instructional_type,
-            credits: this.credits,
-            standardRegistrationYear: this.standardRegistrationYear,
             term: this.term,
             period: this.period,
-            classroom: this.classroom,
-            instructor: this.instructor,
             courseOverview: this.course_overview_keyword,
-            remarks: this.remarks,
             courseNameFilterType: this.course_name_filter_type,
             courseOverviewFilterType: this.course_overview_filter_type,
             filterType: this.filter_type,
@@ -484,15 +476,9 @@ export default Vue.extend({
           req: {
             courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
-            instructionalType: this.instructional_type,
-            credits: this.credits,
-            standardRegistrationYear: this.standardRegistrationYear,
             term: this.term,
             period: this.period,
-            classroom: this.classroom,
-            instructor: this.instructor,
             courseOverview: this.course_overview_keyword,
-            remarks: this.remarks,
             courseNameFilterType: this.course_name_filter_type,
             courseOverviewFilterType: this.course_overview_filter_type,
             filterType: this.filter_type,
@@ -551,15 +537,9 @@ export default Vue.extend({
           req: {
             courseNumber: this.course_name_number,
             courseName: this.course_name_keyword,
-            instructionalType: this.instructional_type,
-            credits: this.credits,
-            standardRegistrationYear: this.standardRegistrationYear,
             term: this.term,
             period: this.period,
-            classroom: this.classroom,
-            instructor: this.instructor,
             courseOverview: this.course_overview_keyword,
-            remarks: this.remarks,
             courseNameFilterType: this.course_name_filter_type,
             courseOverviewFilterType: this.course_overview_filter_type,
             filterType: this.filter_type,
