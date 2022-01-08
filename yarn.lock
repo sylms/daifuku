@@ -1068,6 +1068,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/file-saver@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/file-saver/-/file-saver-2.0.4.tgz#aaf9b96296150d737b2fefa535ced05ed8013d84"
+  integrity sha512-sPZYQEIF/SOnLAvaz9lTuydniP+afBMtElRTdYkeV1QtEgvtJ7qolCPjly6O32QI8CbEmP5O/fztMXEDWfEcrg==
+
 "@types/glob@^7.1.1":
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.4.tgz#ea59e21d2ee5c517914cb4bc8e4153b99e566672"
