@@ -141,6 +141,9 @@
           <b-col>
             <button v-on:click="search">検索</button>
           </b-col>
+          <b-col>
+            <button v-on:click="download">ダウンロード</button>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -280,6 +283,8 @@ import {
   ReqFilterTypeEnum,
   CourseApi,
   FacetApi,
+  CsvApi,
+  //   GetCsvRequest,
 } from "@/openapi";
 import Vue from "vue";
 import InfiniteLoading from "vue-infinite-loading";
@@ -287,6 +292,7 @@ import InfiniteLoading from "vue-infinite-loading";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { saveAs } from "file-saver";
 
 library.add(faExternalLinkAlt);
 
@@ -464,6 +470,56 @@ export default Vue.extend({
           // console.log((Object.keys(res)));
           // console.log(res['termFacet']);
           // console.log('aaaa');
+        })
+        .catch((err) => console.error(err));
+    },
+    download: async function () {
+      this.searchQueryErrorMessage = this.getSearchableErrorMessage();
+      this.searched = !this.searchQueryErrorMessage;
+      this.page = 1;
+      this.rows = [];
+      this.facet = {};
+      this.periodTable = {};
+      // vue-infinite-loading を初期状態に戻すために、この変数に変更を加えている
+      this.infiniteLoadingIdentifier++;
+
+      const conf = new Configuration({
+        basePath: this.apiHost,
+      });
+      const csvApi = new CsvApi(conf);
+      csvApi
+        .getCsv({
+          req: {
+            courseNumber: this.course_name_number,
+            courseName: this.course_name_keyword,
+            instructionalType: this.instructional_type,
+            credits: this.credits,
+            standardRegistrationYear: this.standardRegistrationYear,
+            term: this.term,
+            period: this.period,
+            classroom: this.classroom,
+            instructor: this.instructor,
+            courseOverview: this.course_overview_keyword,
+            remarks: this.remarks,
+            courseNameFilterType: this.course_name_filter_type,
+            courseOverviewFilterType: this.course_overview_filter_type,
+            filterType: this.filter_type,
+            limit: 10,
+            offset: 0,
+          },
+        })
+        .then((res) => {
+          //   this.facet = res;
+          // console.log((Object.keys(res)));
+          // console.log(res['termFacet']);
+          // console.log('aaaa');
+          const fileName = "sample.csv";
+          console.log("aaaaa");
+          console.log(res);
+          let blob = new Blob([res], {
+            type: "text/csv",
+          });
+          saveAs(blob, fileName);
         })
         .catch((err) => console.error(err));
     },
