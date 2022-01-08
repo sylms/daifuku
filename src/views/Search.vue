@@ -429,8 +429,7 @@ export default Vue.extend({
   },
   methods: {
     search: async function () {
-      this.searchQueryErrorMessage = this.getSearchableErrorMessage();
-      this.searched = !this.searchQueryErrorMessage;
+      this.searched = !"";
       this.page = 1;
       this.rows = [];
       this.facet = {};
@@ -469,8 +468,7 @@ export default Vue.extend({
         .catch((err) => console.error(err));
     },
     download: async function () {
-      this.searchQueryErrorMessage = this.getSearchableErrorMessage();
-      this.searched = !this.searchQueryErrorMessage;
+      this.searched = !"";
       this.page = 1;
       this.rows = [];
       this.facet = {};
@@ -518,10 +516,6 @@ export default Vue.extend({
       const term = this.decodeTerm(message);
       this.term += term;
       this.search();
-    },
-
-    getSearchableErrorMessage: function (): string {
-      return "";
     },
 
     getShortString: function (str: string) {
