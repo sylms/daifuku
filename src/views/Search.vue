@@ -432,10 +432,12 @@ export default Vue.extend({
       infiniteLoadingIdentifier: 0,
     };
   },
+  mounted: function () {
+    this.search();
+  },
   methods: {
     search: async function () {
-      this.searchQueryErrorMessage = this.getSearchableErrorMessage();
-      this.searched = !this.searchQueryErrorMessage;
+      this.searched = !"";
       this.page = 1;
       this.rows = [];
       this.facet = {};
@@ -468,8 +470,7 @@ export default Vue.extend({
         .catch((err) => console.error(err));
     },
     download: async function () {
-      this.searchQueryErrorMessage = this.getSearchableErrorMessage();
-      this.searched = !this.searchQueryErrorMessage;
+      this.searched = !"";
       this.page = 1;
       this.rows = [];
       this.facet = {};
@@ -511,19 +512,6 @@ export default Vue.extend({
       const term = this.decodeTerm(message);
       this.term += term;
       this.search();
-    },
-
-    getSearchableErrorMessage: function (): string {
-      if (
-        !this.course_name_keyword &&
-        !this.course_overview_keyword &&
-        !this.course_name_number &&
-        !this.period &&
-        !this.term
-      ) {
-        return "空での検索は出来ません。";
-      }
-      return "";
     },
 
     getShortString: function (str: string) {
