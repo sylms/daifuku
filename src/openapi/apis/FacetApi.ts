@@ -58,7 +58,7 @@ export class FacetApi extends runtime.BaseAPI {
      * 科目を検索します。  例えば、`course_name` に「情報」と指定した場合、科目名に「情報」を含む科目の情報を返します。 `course_name` と `course_overview` のどちらかはクエリにつける必要があります。 
      * /facet
      */
-    async getFacet(requestParameters: GetFacetRequest = {}, initOverrides?: RequestInit): Promise<Facet> {
+    async getFacet(requestParameters: GetFacetRequest, initOverrides?: RequestInit): Promise<Facet> {
         const response = await this.getFacetRaw(requestParameters, initOverrides);
         return await response.value();
     }

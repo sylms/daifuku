@@ -58,7 +58,7 @@ export class CourseApi extends runtime.BaseAPI {
      * 科目を検索します。  例えば、`course_name` に「情報」と指定した場合、科目名に「情報」を含む科目の情報を返します。 `course_name` と `course_overview` のどちらかはクエリにつける必要があります。 
      * /course
      */
-    async getCourse(requestParameters: GetCourseRequest = {}, initOverrides?: RequestInit): Promise<Array<Course>> {
+    async getCourse(requestParameters: GetCourseRequest, initOverrides?: RequestInit): Promise<Array<Course>> {
         const response = await this.getCourseRaw(requestParameters, initOverrides);
         return await response.value();
     }
