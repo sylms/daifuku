@@ -82,7 +82,7 @@ export interface Course {
      * @type {Array<number>}
      * @memberof Course
      */
-    term?: Array<number> | null;
+    term?: Array<number>;
     /**
      * 曜時限である。
      * @type {Array<string>}
@@ -94,7 +94,7 @@ export interface Course {
      * @type {string}
      * @memberof Course
      */
-    classroom?: string | null;
+    classroom?: string;
     /**
      * 担当教員である。
      * @type {Array<string>}
@@ -106,13 +106,13 @@ export interface Course {
      * @type {string}
      * @memberof Course
      */
-    courseOverview?: string | null;
+    courseOverview?: string;
     /**
      * 備考である。
      * @type {string}
      * @memberof Course
      */
-    remarks?: string | null;
+    remarks?: string;
     /**
      * 科目等履修生申請可否である。対応は、「×」は 0、「△」は 1、空は 2 となっている。
      * @type {number}
@@ -124,25 +124,25 @@ export interface Course {
      * @type {string}
      * @memberof Course
      */
-    applicationConditions?: string | null;
+    applicationConditions?: string;
     /**
      * 英語(日本語)科目名である。
      * @type {string}
      * @memberof Course
      */
-    altCourseName?: string | null;
+    altCourseName?: string;
     /**
      * 科目コードである。
      * @type {string}
      * @memberof Course
      */
-    courseCode?: string | null;
+    courseCode?: string;
     /**
      * 要件科目名である。
      * @type {string}
      * @memberof Course
      */
-    courseCodeName?: string | null;
+    courseCodeName?: string;
     /**
      * KdB からエクスポートした CSV ファイルに記載されている「データ更新日」である。
      * @type {string}

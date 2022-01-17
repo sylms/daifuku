@@ -55,7 +55,7 @@ export class CsvApi extends runtime.BaseAPI {
      * CSV をダウンロード 
      * /csv
      */
-    async getCsv(requestParameters: GetCsvRequest = {}, initOverrides?: RequestInit): Promise<string> {
+    async getCsv(requestParameters: GetCsvRequest, initOverrides?: RequestInit): Promise<string> {
         const response = await this.getCsvRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -18,7 +18,7 @@ import {
     FacetTermFacetFromJSON,
     FacetTermFacetFromJSONTyped,
     FacetTermFacetToJSON,
-} from './FacetTermFacet';
+} from './';
 
 /**
  * ファセット検索のレスポンス
