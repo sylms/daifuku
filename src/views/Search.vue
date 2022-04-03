@@ -207,7 +207,7 @@
 
               <template #cell(courseNumber)="data">
                 <a
-                  :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/`"
+                  :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/0`"
                   target="_blank"
                   rel="noopener"
                   >{{ data.value }}</a
