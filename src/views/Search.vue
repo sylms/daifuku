@@ -211,6 +211,12 @@
                   target="_blank"
                   rel="noopener"
                   >{{ data.value }}</a
+                ><br />
+                <a
+                  :href="`https://kdb.tsukuba.ac.jp/syllabi/${data.item.year}/${data.item.courseNumber}/jpn/0`"
+                  target="_blank"
+                  rel="noopener"
+                  >シラバス最新版(ある場合)</a
                 >
               </template>
 
