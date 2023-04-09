@@ -264,7 +264,7 @@
                 <span v-for="(item, index) in data.value" v-bind:key="index">
                   {{ index == 0 ? "" : ", " }}
                   <a
-                    :href="`https://trios.tsukuba.ac.jp/researcher/search/simple/${item}`"
+                    :href="`https://trios.tsukuba.ac.jp/ja/researchers?q=${item}`"
                     target="_blank"
                     rel="noopener"
                     >{{ item }}</a
