@@ -120,6 +120,22 @@
           </b-col>
         </b-row>
         <b-row>
+          <b-col sm="3">
+            <label for="gotCourseNumber">修得済み科目番号番号</label>
+          </b-col>
+          <b-col sm="2"> </b-col>
+          <b-col sm="7">
+            <b-form-input
+              id="got_course_number"
+              v-model="got_course_number"
+              placeholder="除去したい科目番号を半角カンマ区切りで入力してください"
+              type="search"
+              trim
+              @keypress.enter="search"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
           <b-col sm="2">
             <div id="selectFilterType_ALL">
               <input
@@ -340,6 +356,7 @@ export default Vue.extend({
     searchPlaceholderMessage: string;
     course_name_number: string;
     course_name_keyword: string;
+    got_course_number: string
     credits: string;
     standardRegistrationYear: number;
     term: string;
@@ -419,6 +436,7 @@ export default Vue.extend({
       substringMaxNum: 5,
       course_name_number: "",
       course_name_keyword: "",
+      got_course_number: "",
       credits: "",
       standardRegistrationYear: -1,
       term: "",
@@ -552,7 +570,9 @@ export default Vue.extend({
           },
         })
         .then((courses) => {
-          this.rows.push(...courses);
+          this.rows.push(...(courses.filter(course => 
+            course.courseNumber && !this.got_course_number.split(",").map(e => e.trim()).includes(course.courseNumber)
+          )));
           if (courses.length < this.limit) {
             $state.complete();
             return;
