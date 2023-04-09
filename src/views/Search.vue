@@ -356,7 +356,7 @@ export default Vue.extend({
     searchPlaceholderMessage: string;
     course_name_number: string;
     course_name_keyword: string;
-    got_course_number: string
+    got_course_number: string;
     credits: string;
     standardRegistrationYear: number;
     term: string;
@@ -570,9 +570,16 @@ export default Vue.extend({
           },
         })
         .then((courses) => {
-          this.rows.push(...(courses.filter(course => 
-            course.courseNumber && !this.got_course_number.split(",").map(e => e.trim()).includes(course.courseNumber)
-          )));
+          this.rows.push(
+            ...courses.filter(
+              (course) =>
+                course.courseNumber &&
+                !this.got_course_number
+                  .split(",")
+                  .map((e) => e.trim())
+                  .includes(course.courseNumber)
+            )
+          );
           if (courses.length < this.limit) {
             $state.complete();
             return;
