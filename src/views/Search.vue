@@ -199,6 +199,16 @@
               stacked="sm"
               thead-class="fixed-table-header"
             >
+              <template #cell(excludeCourse)="data">
+                <b-button
+                  class="btn-block"
+                  variant="outline-primary"
+                  v-on:click="addCourseNumberGot(data.item.courseNumber)"
+                >
+                  除外
+                </b-button>
+              </template>
+
               <template #cell(searchOnTwitter)="data">
                 <a
                   :href="`https://twitter.com/search?q=%22${removeAlphanumeric(
@@ -376,6 +386,10 @@ export default Vue.extend({
   } {
     return {
       fields: [
+        {
+          label: "除外",
+          key: "excludeCourse",
+        },
         {
           label: "Twitter で検索",
           key: "searchOnTwitter",
@@ -620,6 +634,19 @@ export default Vue.extend({
         "その他",
       ];
       return ls[num - 1];
+    },
+
+    addCourseNumberGot: function (courseNumber: string) {
+      this.got_course_number += ", ";
+      this.got_course_number += courseNumber;
+      this.rows = this.rows.filter(
+        (course) =>
+          course.courseNumber &&
+          !this.got_course_number
+            .split(",")
+            .map((e) => e.trim())
+            .includes(course.courseNumber)
+      );
     },
   },
 });
